@@ -1,0 +1,33 @@
+/* StudyBrowser YouTube CSS: Erase Shorts from the Interface */
+
+/* 1. Left Sidebar Shorts buttons */
+a[title="Shorts"],
+a[href*="/shorts/"],
+ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+ytd-guide-entry-renderer:has(a[title="Shorts"]),
+tp-yt-paper-item:has(a[title="Shorts"]) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 2. Homepage & Search Results Shorts Carousels / Reels */
+ytd-reel-shelf-renderer,
+ytd-rich-shelf-renderer[is-shorts],
+ytd-reel-item-renderer,
+grid-subheader-renderer:has(yt-formatted-string[title="Shorts"]) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 3. Filter chips */
+yt-chip-cloud-chip-renderer:has(yt-formatted-string[title="Shorts"]) {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* 4. Shorts comments & overlay */
+ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-shorts-comments"] {
+  display: none !important;
+}

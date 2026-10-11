@@ -54,9 +54,9 @@ rm -f /var/snap/firefox/current/policies/policies.json 2>/dev/null || true
 # 5. Remove daemon & sudoers
 rm -f /etc/sudoers.d/study-timer
 rm -f /usr/local/bin/study-timer-daemon /usr/local/bin/study-fb-daemon
-rm -f /usr/local/bin/study-fb /usr/local/bin/study-reddit /usr/local/bin/toggle-bw /usr/local/bin/focus
+rm -f /usr/local/bin/study-fb /usr/local/bin/study-reddit /usr/local/bin/toggle-bw /usr/local/bin/focus /usr/local/bin/study-browser
 rm -f /usr/local/bin/hsc_math_engine.py /usr/local/bin/study_lockout.py /usr/local/bin/study-screen-listener
-rm -rf /etc/study-timer
+rm -rf /etc/study-timer /usr/share/study-browser "$TARGET_HOME/.config/study-browser"
 rm -f /lib/systemd/system-sleep/study-resume-grayscale.sh
 rm -f "$TARGET_HOME/.config/systemd/user/study-screen-listener.service"
 su - "$TARGET_USER" -c "systemctl --user disable --now study-screen-listener.service" 2>/dev/null || true
@@ -77,8 +77,10 @@ gsettings reset org.gnome.desktop.background primary-color
 rm -f "$TARGET_HOME/Desktop/online-class-mode.desktop"
 rm -f "$TARGET_HOME/Desktop/study-fb.desktop"
 rm -f "$TARGET_HOME/Desktop/study-reddit.desktop"
+rm -f "$TARGET_HOME/Desktop/study-browser.desktop"
 rm -f "$TARGET_HOME/.local/share/applications/online-class-mode.desktop"
 rm -f "$TARGET_HOME/.local/share/applications/study-fb.desktop"
 rm -f "$TARGET_HOME/.local/share/applications/study-reddit.desktop"
+rm -f "$TARGET_HOME/.local/share/applications/study-browser.desktop"
 
 echo "[✓] All settings restored to normal Ubuntu defaults."

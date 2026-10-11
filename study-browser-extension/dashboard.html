@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StudyBrowser • Distraction-Free Study Portal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    body {
+      background-color: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .header p {
+      color: #94a3b8;
+      font-size: 1.05rem;
+    }
+    .badges {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1e222d;
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+    .badge.green {
+      border-color: #059669;
+      color: #34d399;
+      background: rgba(5, 150, 105, 0.12);
+    }
+    .badge.red {
+      border-color: #dc2626;
+      color: #f87171;
+      background: rgba(220, 38, 38, 0.12);
+    }
+    .container {
+      max-width: 960px;
+      width: 100%;
+    }
+    .section-title {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748b;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-bottom: 35px;
+    }
+    .card {
+      background: #181c27;
+      border: 1px solid #282f3f;
+      border-radius: 12px;
+      padding: 22px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #3b82f6;
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
+    }
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin-bottom: 18px;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #232a3b;
+      padding-top: 14px;
+    }
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #232a3b;
+      color: #93c5fd;
+    }
+    .btn {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #3b82f6;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .yt-card {
+      background: linear-gradient(135deg, #1f1b24 0%, #171b26 100%);
+      border: 1px solid #3c2a38;
+    }
+    .yt-card:hover {
+      border-color: #ef4444;
+      box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.2);
+    }
+    .yt-card .tag {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+    }
+    .yt-card .btn {
+      color: #ef4444;
+    }
+    .footer-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: auto;
+      padding-top: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎓 StudyBrowser</h1>
+    <p>Super Strict Academic Portal • Zero Feeds • Zero Reels • Zero Shorts</p>
+    <div class="badges">
+      <span class="badge green">● Active & Guarded</span>
+      <span class="badge red">✕ YouTube Shorts Permanently Erased</span>
+      <span class="badge green">✓ 4 Authorized Facebook Groups Only</span>
+      <span class="badge red">✕ Personal News Feed Annihilated</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">📘 Authorized Facebook Study Groups</div>
+    <div class="grid">
+      <!-- Group 1 -->
+      <a href="https://www.facebook.com/groups/fabzoology27/" class="card">
+        <div>
+          <div class="card-icon">🧬</div>
+          <div class="card-title">FAB Zoology 27</div>
+          <div class="card-desc">HSC Biology 2nd Paper (Zoology) academic group, notices, recorded class videos, and resources.</div>
+        </div>
+        <div class="card-footer">
+          <span class="tag">fabzoology27</span>
+          <span class="btn">Open Group →</span>
+        </div>
+      </a>
+
+      <!-- Group 2 -->
+      <a href="https://www.facebook.com/groups/fabbotany27/" class="card">
+        <div>
+          <div class="card-icon">🌿</div>
+          <div class="card-title">FAB Botany 27</div>
+          <div class="card-desc">HSC Biology 1st Paper (Botany) lectures, assignments, recorded sessions, and study materials.</div>
+        </div>
+        <div class="card-footer">
+          <span class="tag">fabbotany27</span>
+          <span class="btn">Open Group →</span>
+        </div>
+      </a>
+
+      <!-- Group 3 -->
+      <a href="https://www.facebook.com/groups/1612120089807832/" class="card">
+        <div>
+          <div class="card-icon">📐</div>
+          <div class="card-title">Academic Study Group</div>
+          <div class="card-desc">HSC Higher Mathematics and core sciences problem-solving discussions and lecture archives.</div>
+        </div>
+        <div class="card-footer">
+          <span class="tag">ID: 1612120089807832</span>
+          <span class="btn">Open Group →</span>
+        </div>
+      </a>
+
+      <!-- Group 4 -->
+      <a href="https://www.facebook.com/groups/saikatvaisengineeringchemistryhsc26/" class="card">
+        <div>
+          <div class="card-icon">🧪</div>
+          <div class="card-title">Engineering Chemistry (HSC 26)</div>
+          <div class="card-desc">Saikat Bhai's Engineering Foundation & HSC Chemistry lectures, problem sets, and tests.</div>
+        </div>
+        <div class="card-footer">
+          <span class="tag">saikatvais...hsc26</span>
+          <span class="btn">Open Group →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-title">🎥 Educational Video Streaming</div>
+    <div class="grid">
+      <!-- YouTube Card -->
+      <a href="https://www.youtube.com/" class="card yt-card">
+        <div>
+          <div class="card-icon">📺</div>
+          <div class="card-title">YouTube Lectures (Strict Mode)</div>
+          <div class="card-desc">Search and stream educational lectures and chapters. Shorts carousels, reels, and feeds are completely removed.</div>
+        </div>
+        <div class="card-footer">
+          <span class="tag">No Shorts • No Reels</span>
+          <span class="btn">Search Lectures →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Protected by Ubuntu-For-Study Guardian Engine. All unapproved links, feeds, and external reels are strictly rejected.
+  </div>
+</body>
+</html>

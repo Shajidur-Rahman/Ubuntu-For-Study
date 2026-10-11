@@ -104,7 +104,30 @@ Willpower is finite. When studying for competitive examinations, modern web plat
 
 ---
 
-### 2. 🧮 Controlled 14-Minute Study Access
+### 2. 🌐 StudyBrowser: Super Strict Academic Browser
+
+Because YouTube and Facebook operate as dynamic Single Page Applications (SPAs), traditional DNS and URL blockers fail to stop client-side feeds and Reels. **StudyBrowser** solves this by integrating a hardwired Chromium extension and isolated user environment:
+
+#### 🚫 100% YouTube Shorts Eradication
+* **Network & SPA Interception:** Drops all navigation requests to `/shorts/*` before a single frame can load, instantly bouncing back to `youtube.com/`.
+* **DOM Purifier:** Injected CSS and MutationObservers permanently remove the "Shorts" tab, homepage carousels (`ytd-reel-shelf-renderer`), and search result shelves.
+* **Full-Length Lectures Allowed:** Watch normal educational lectures (`/watch?v=...`) with clean video streaming and zero algorithmic rabbit holes.
+
+#### 🔒 Strictly 4 Authorized Facebook Groups Only
+* **Access Restricted Exclusively To:**
+  1. 🧬 **FAB Zoology 27** (`facebook.com/groups/fabzoology27/`)
+  2. 🌿 **FAB Botany 27** (`facebook.com/groups/fabbotany27/`)
+  3. 📐 **Academic Study Group** (`facebook.com/groups/1612120089807832/`)
+  4. 🧪 **Engineering Chemistry (HSC 26)** (`facebook.com/groups/saikatvaisengineeringchemistryhsc26/`)
+* **Personal Feeds & Reels Annihilated:**
+  - Direct attempts to open the News Feed (`facebook.com/`), Reels (`facebook.com/reel/`), or Watch (`facebook.com/watch/`) are intercepted and blocked with a warning screen.
+  - History API (`pushState` / `replaceState`) is hooked: clicking any external link inside a group is cancelled in the capture phase.
+  - Top navigation icons (Home, Video, Marketplace, Gaming) are completely stripped from the page DOM.
+* **Full Group Video Playback:** Videos, live streams, and lecture recordings posted inside the 4 authorized groups play with HD streaming, pause/play, speed controls, and fullscreen.
+
+---
+
+### 3. 🧮 Controlled 14-Minute Study Access
 
 Need to check an urgent notice in an HSC Facebook group or search an academic thread on Reddit? You cannot simply open them. You must earn your access:
 
@@ -137,7 +160,7 @@ Need to check an urgent notice in an HSC Facebook group or search an academic th
 
 ---
 
-### 3. 🤖 Intelligent Self-Healing & Crash Recovery
+### 4. 🤖 Intelligent Self-Healing & Crash Recovery
 
 Distraction blockers that fail after a system crash or reboot are useless. Ubuntu-For-Study is designed to be **self-healing**:
 
@@ -154,7 +177,7 @@ Distraction blockers that fail after a system crash or reboot are useless. Ubunt
 
 ---
 
-### 4. 🖥️ Hardware Grayscale & Dopamine Detox
+### 5. 🖥️ Hardware Grayscale & Dopamine Detox
 
 * **24/7 Grayscale Mode:** Runs via GPU desaturation (`gnome-bedtime-mode`). Removes color-based dopamine triggers from social media, thumbnails, and ads.
 * **Online Class Mode:** Attending a lecture where color is essential for chemistry diagrams or biology graphs?
@@ -164,7 +187,7 @@ Distraction blockers that fail after a system crash or reboot are useless. Ubunt
 * **Minimalist Desktop Environment:**
   - Window animations completely disabled for zero motion distractions.
   - System event sounds and alert bells muted.
-  - GNOME Dock auto-hides automatically.
+  - GNOME Dock auto-hiding automatically.
   - 4000K warm night light active 24/7 to reduce eye fatigue during late-night study sessions.
   - Solid dark gray wallpaper (`#1e1e1e`) with clean, distraction-free desktop shortcuts.
 
@@ -176,7 +199,8 @@ All tools are installed system-wide in `/usr/local/bin` and can be run from any 
 
 | Command | Action |
 | :--- | :--- |
-| `study-fb` | Launch the Facebook HSC differentiation challenge (14-min unlock) |
+| `study-browser` | Launch **StudyBrowser** (Zero YouTube Shorts, 4 Facebook groups only) |
+| `study-fb` | Launch Facebook HSC differentiation challenge (14-min unlock) |
 | `study-reddit` | Launch Reddit challenge (HSC math + 5 Islamic reflection gates) |
 | `toggle-bw` | Toggle between Full Color (Online Class Mode) and Grayscale |
 | `toggle-bw --force-on` | Force Grayscale mode on immediately |
@@ -196,10 +220,23 @@ Ubuntu-For-Study/
 ├── install.sh                         # 1-command installer (self-bootstrap & self-healing)
 ├── uninstall.sh                       # 1-click uninstaller & complete default restorer
 ├── desktop/
+│   ├── study-browser.desktop          # Desktop launcher for Super Strict StudyBrowser
 │   ├── online-class-mode.desktop      # Desktop button for Super+Alt+B lecture color toggle
 │   ├── study-fb.desktop               # Desktop launcher for Facebook HSC math gate
 │   └── study-reddit.desktop           # Desktop launcher for Reddit math + conscience gate
+├── study-browser-extension/           # Super Strict Browser Guardian Extension
+│   ├── manifest.json                  # Extension manifest (MV3)
+│   ├── background.js                  # Navigation interceptor & policy engine
+│   ├── rules.json                     # Declarative network redirect rules
+│   ├── content_youtube.js             # SPA Shorts killer & MutationObserver
+│   ├── style_youtube.css              # DOM CSS purging all Shorts elements
+│   ├── content_facebook.js            # 4-group enforcer & capture-phase link guard
+│   ├── style_facebook.css             # DOM CSS stripping feeds, reels, and nav icons
+│   ├── dashboard.html                 # Clean, dark academic study portal
+│   ├── blocked_fb.html                # Unauthorized Facebook attempt warning
+│   └── blocked_shorts.html            # Shorts eradication notice screen
 └── scripts/
+    ├── study-browser                  # Launcher for StudyBrowser application
     ├── hsc_math_engine.py             # Procedural HSC differentiation & algebra math generator
     ├── study_lockout.py               # 3-strike lockout & 30-minute penalty state manager
     ├── study-fb                       # Interactive CLI for Facebook study gate

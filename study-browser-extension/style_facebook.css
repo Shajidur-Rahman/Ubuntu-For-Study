@@ -1,0 +1,32 @@
+/* StudyBrowser Facebook CSS: Suppress Feeds, Reels, and Global Distractions */
+
+/* 1. Top Global Navigation Icons (Home, Watch, Marketplace, Gaming) */
+div[role="navigation"] a[aria-label="Home"],
+div[role="navigation"] a[aria-label="Video"],
+div[role="navigation"] a[aria-label="Watch"],
+div[role="navigation"] a[aria-label="Marketplace"],
+div[role="navigation"] a[aria-label="Gaming"],
+div[role="banner"] a[aria-label="Home"],
+div[role="banner"] a[aria-label="Video"],
+div[role="banner"] a[aria-label="Watch"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 2. Suppress Reels, Stories & Suggested Posts */
+div[aria-label="Reels"],
+div[aria-label="Stories"],
+div[data-pagelet="Stories"],
+div[data-pagelet="Reels"],
+a[href*="/reel/"],
+a[href*="/watch/"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 3. Keep Group Video Player completely clean & unobstructed */
+video {
+  border-radius: 8px;
+}

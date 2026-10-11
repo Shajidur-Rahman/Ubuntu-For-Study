@@ -1,0 +1,71 @@
+{
+  "manifest_version": 3,
+  "name": "StudyBrowser Guardian Engine",
+  "version": "1.0.0",
+  "description": "Enforces strict academic focus: Zero YouTube Shorts, strictly 4 Facebook study groups, and zero algorithmic feeds.",
+  "permissions": [
+    "declarativeNetRequest",
+    "webNavigation",
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.youtu.be/*",
+    "*://*.facebook.com/*",
+    "*://*.fbcdn.net/*",
+    "*://*.fbsbx.com/*"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "chrome_url_overrides": {
+    "newtab": "dashboard.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtu.be/*"
+      ],
+      "js": ["content_youtube.js"],
+      "css": ["style_youtube.css"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*.facebook.com/*"
+      ],
+      "js": ["content_facebook.js"],
+      "css": ["style_facebook.css"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "dashboard.html",
+    "default_title": "StudyBrowser Portal"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dashboard.html",
+        "blocked_fb.html",
+        "blocked_shorts.html",
+        "style_facebook.css",
+        "style_youtube.css"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

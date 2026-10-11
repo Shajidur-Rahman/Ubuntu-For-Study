@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# StudyBrowser: Super Strict Distraction-Free Academic Browser Runner
+# Enforces Zero YouTube Shorts & strictly 4 Authorized Facebook Groups
+# ==============================================================================
+
+PROFILE_DIR="$HOME/.config/study-browser/profile"
+EXT_DIR="$HOME/.config/study-browser/extension"
+
+# Ensure extension files exist
+if [ ! -f "$EXT_DIR/manifest.json" ]; then
+    mkdir -p "$EXT_DIR"
+    if [ -d "/usr/share/study-browser/extension" ]; then
+        cp -r /usr/share/study-browser/extension/* "$EXT_DIR/"
+    elif [ -d "$HOME/Ubuntu-For-Study/study-browser-extension" ]; then
+        cp -r "$HOME/Ubuntu-For-Study/study-browser-extension/"* "$EXT_DIR/"
+    fi
+fi
+
+mkdir -p "$PROFILE_DIR"
+
+# Detect Chromium engine
+BROWSER_BIN=""
+if command -v google-chrome-stable >/dev/null 2>&1; then
+    BROWSER_BIN="google-chrome-stable"
+elif command -v google-chrome >/dev/null 2>&1; then
+    BROWSER_BIN="google-chrome"
+elif command -v brave-browser >/dev/null 2>&1; then
+    BROWSER_BIN="brave-browser"
+elif command -v chromium-browser >/dev/null 2>&1; then
+    BROWSER_BIN="chromium-browser"
+elif command -v chromium >/dev/null 2>&1; then
+    BROWSER_BIN="chromium"
+else
+    echo "[!] Error: No Chromium-based browser engine found."
+    exit 1
+fi
+
+TARGET_URL="$1"
+if [ -z "$TARGET_URL" ]; then
+    TARGET_URL="file://$EXT_DIR/dashboard.html"
+fi
+
+exec "$BROWSER_BIN" \
+    --user-data-dir="$PROFILE_DIR" \
+    --load-extension="$EXT_DIR" \
+    --disable-extensions-except="$EXT_DIR" \
+    --no-first-run \
+    --no-default-browser-check \
+    --class="StudyBrowser" \
+    "$TARGET_URL" >/dev/null 2>&1 &

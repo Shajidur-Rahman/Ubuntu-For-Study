@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=StudyBrowser (Strict Mode)
+Comment=Super Strict Academic Browser: Zero YouTube Shorts, strictly 4 Facebook study groups
+Exec=study-browser
+Icon=applications-education
+Terminal=false
+Type=Application
+Categories=Education;Network;WebBrowser;
+Keywords=study;browser;youtube;shorts;facebook;groups;

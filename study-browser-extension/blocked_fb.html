@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⛔ Access Blocked • StudyBrowser Guardian</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    body {
+      background-color: #0b0d13;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .box {
+      max-width: 620px;
+      background: #141824;
+      border: 1px solid #ef4444;
+      border-radius: 16px;
+      padding: 35px 30px;
+      box-shadow: 0 20px 40px -10px rgba(239, 68, 68, 0.15);
+    }
+    .icon {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+    }
+    h1 {
+      font-size: 1.6rem;
+      color: #f87171;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+    .attempt-box {
+      background: #0f121b;
+      border: 1px solid #23293a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #fca5a5;
+      word-break: break-all;
+      margin-bottom: 25px;
+    }
+    .allowed-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .group-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    .grp-btn {
+      background: #1e2436;
+      border: 1px solid #333d59;
+      color: #93c5fd;
+      padding: 12px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .grp-btn:hover {
+      background: #252e45;
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+    .home-btn {
+      display: inline-block;
+      background: #2563eb;
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s ease;
+    }
+    .home-btn:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="icon">⛔</div>
+    <h1>Access Restricted to Authorized Groups</h1>
+    <p>
+      You attempted to access an unapproved Facebook section, feed, or profile.
+      <strong>StudyBrowser is strictly restricted to your 4 authorized HSC academic groups.</strong>
+    </p>
+
+    <div class="attempt-box" id="attemptedUrl">Blocked URL</div>
+
+    <div class="allowed-title">Your 4 Approved Groups:</div>
+    <div class="group-buttons">
+      <a href="https://www.facebook.com/groups/fabzoology27/" class="grp-btn">🧬 FAB Zoology 27</a>
+      <a href="https://www.facebook.com/groups/fabbotany27/" class="grp-btn">🌿 FAB Botany 27</a>
+      <a href="https://www.facebook.com/groups/1612120089807832/" class="grp-btn">📐 Academic Math Group</a>
+      <a href="https://www.facebook.com/groups/saikatvaisengineeringchemistryhsc26/" class="grp-btn">🧪 Chemistry HSC 26</a>
+    </div>
+
+    <a href="dashboard.html" class="home-btn">← Return to StudyBrowser Portal</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const attempted = params.get('attempt') || 'facebook.com';
+    document.getElementById('attemptedUrl').textContent = attempted;
+  </script>
+</body>
+</html>

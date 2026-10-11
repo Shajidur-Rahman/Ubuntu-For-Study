@@ -60,9 +60,11 @@ if [ ! -d "$SCRIPT_DIR/scripts" ]; then
             "scripts/study-screen-listener"
             "scripts/study-resume-grayscale.sh"
             "scripts/focus"
+            "scripts/study-browser"
             "desktop/online-class-mode.desktop"
             "desktop/study-fb.desktop"
             "desktop/study-reddit.desktop"
+            "desktop/study-browser.desktop"
             "uninstall.sh"
         )
         for f in "${FILES[@]}"; do
@@ -222,7 +224,7 @@ cp "$SCRIPT_DIR/scripts/study-timer-daemon.py" "$BIN_DIR/study-timer-daemon"
 chmod 755 "$BIN_DIR/study-timer-daemon"
 ln -sf "$BIN_DIR/study-timer-daemon" "$BIN_DIR/study-fb-daemon"
 
-ALL_SCRIPTS=("study-fb" "study-reddit" "hsc_math_engine.py" "study_lockout.py" "toggle-bw" "focus" "study-screen-listener")
+ALL_SCRIPTS=("study-fb" "study-reddit" "hsc_math_engine.py" "study_lockout.py" "toggle-bw" "focus" "study-screen-listener" "study-browser")
 for s in "${ALL_SCRIPTS[@]}"; do
     if [ -f "$SCRIPT_DIR/scripts/$s" ]; then
         cp "$SCRIPT_DIR/scripts/$s" "$BIN_DIR/$s"
@@ -232,6 +234,17 @@ for s in "${ALL_SCRIPTS[@]}"; do
         chmod 755 "$USER_BIN/$s"
     fi
 done
+
+# Deploy StudyBrowser Guardian Extension
+SYS_EXT_DIR="/usr/share/study-browser/extension"
+USER_EXT_DIR="$TARGET_HOME/.config/study-browser/extension"
+mkdir -p "$SYS_EXT_DIR" "$USER_EXT_DIR" "$TARGET_HOME/.config/study-browser/profile"
+
+if [ -d "$SCRIPT_DIR/study-browser-extension" ]; then
+    cp -r "$SCRIPT_DIR/study-browser-extension/"* "$SYS_EXT_DIR/"
+    cp -r "$SCRIPT_DIR/study-browser-extension/"* "$USER_EXT_DIR/"
+    chown -R "$TARGET_USER:$TARGET_USER" "$TARGET_HOME/.config/study-browser"
+fi
 
 # Configure passwordless sudo for study daemon
 cat << EOF > /etc/sudoers.d/study-timer
@@ -341,7 +354,7 @@ APP_DIR="$TARGET_HOME/.local/share/applications"
 DESKTOP_DIR="$TARGET_HOME/Desktop"
 mkdir -p "$APP_DIR" "$DESKTOP_DIR"
 
-LAUNCHERS=("online-class-mode.desktop" "study-fb.desktop" "study-reddit.desktop")
+LAUNCHERS=("online-class-mode.desktop" "study-fb.desktop" "study-reddit.desktop" "study-browser.desktop")
 for l in "${LAUNCHERS[@]}"; do
     if [ -f "$SCRIPT_DIR/desktop/$l" ]; then
         cp "$SCRIPT_DIR/desktop/$l" "$APP_DIR/$l"
