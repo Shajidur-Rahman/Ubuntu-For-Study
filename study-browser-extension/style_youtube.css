@@ -1,33 +1,78 @@
-/* StudyBrowser YouTube CSS: Erase Shorts from the Interface */
+/* StudyBrowser YouTube CSS: Pure Academic Lecture Interface */
 
-/* 1. Left Sidebar Shorts buttons */
+/* ==========================================================================
+   1. COMPLETELY BLANK YOUTUBE HOMEPAGE (No Recommendations)
+   ========================================================================== */
+ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,
+ytd-browse[page-subtype="home"] #contents,
+ytd-browse[page-subtype="home"] #chips,
+ytd-browse[page-subtype="home"] ytd-feed-filter-chip-bar-renderer {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Beautiful calm search prompt on the empty homepage */
+ytd-browse[page-subtype="home"] #primary::before {
+  content: "🎯 Use the search bar above to find your lecture or class video. Zero distractions • Pure focus.";
+  display: block !important;
+  text-align: center;
+  margin-top: 25vh;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: #71717a;
+  letter-spacing: 0.2px;
+}
+
+/* ==========================================================================
+   2. HIDE ALL SIDE RECOMMENDATIONS ON WATCH PAGE (Lecture Mode)
+   ========================================================================== */
+#secondary,
+#secondary-inner,
+#related,
+ytd-watch-next-secondary-results-renderer,
+ytd-item-section-renderer[section-identifier="comment-item-section"] {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Center and expand lecture player cleanly */
+ytd-watch-flexy[flexy] #primary.ytd-watch-flexy {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  padding-right: 0 !important;
+}
+
+ytd-watch-flexy[flexy][is-two-columns_] #columns.ytd-watch-flexy {
+  display: block !important;
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+}
+
+/* ==========================================================================
+   3. PERMANENTLY ERASE ALL SHORTS ELEMENTS ACROSS ALL PAGES
+   ========================================================================== */
+ytd-reel-shelf-renderer,
+ytd-rich-shelf-renderer[is-shorts],
+ytd-reel-item-renderer,
+ytd-rich-item-renderer:has(a[href*="/shorts/"]),
+ytd-video-renderer:has(a[href*="/shorts/"]),
 a[title="Shorts"],
 a[href*="/shorts/"],
 ytd-mini-guide-entry-renderer[aria-label="Shorts"],
 ytd-guide-entry-renderer:has(a[title="Shorts"]),
-tp-yt-paper-item:has(a[title="Shorts"]) {
+tp-yt-paper-item:has(a[title="Shorts"]),
+yt-chip-cloud-chip-renderer:has(yt-formatted-string[title="Shorts"]),
+grid-subheader-renderer:has(yt-formatted-string[title="Shorts"]),
+ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-shorts-comments"],
+.ytp-ce-element,
+.ytp-endscreen-content {
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
-}
-
-/* 2. Homepage & Search Results Shorts Carousels / Reels */
-ytd-reel-shelf-renderer,
-ytd-rich-shelf-renderer[is-shorts],
-ytd-reel-item-renderer,
-grid-subheader-renderer:has(yt-formatted-string[title="Shorts"]) {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-/* 3. Filter chips */
-yt-chip-cloud-chip-renderer:has(yt-formatted-string[title="Shorts"]) {
-  display: none !important;
-  visibility: hidden !important;
-}
-
-/* 4. Shorts comments & overlay */
-ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-shorts-comments"] {
-  display: none !important;
 }

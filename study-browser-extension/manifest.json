@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "StudyBrowser Guardian Engine",
-  "version": "1.0.0",
-  "description": "Enforces strict academic focus: Zero YouTube Shorts, strictly 4 Facebook study groups, and zero algorithmic feeds.",
+  "version": "1.1.0",
+  "description": "Enforces strict academic focus: Zero YouTube Shorts, blank homepage, zero watch recommendations, and 4 Facebook study groups.",
   "permissions": [
     "declarativeNetRequest",
     "webNavigation",
@@ -37,10 +37,20 @@
         "*://*.youtube.com/*",
         "*://*.youtu.be/*"
       ],
-      "js": ["content_youtube.js"],
+      "js": ["content_youtube_main.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtu.be/*"
+      ],
+      "js": ["content_youtube_isolated.js"],
       "css": ["style_youtube.css"],
       "run_at": "document_start",
-      "all_frames": false
+      "all_frames": true
     },
     {
       "matches": [
@@ -59,6 +69,7 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "content_youtube_main.js",
         "dashboard.html",
         "blocked_fb.html",
         "blocked_shorts.html",
