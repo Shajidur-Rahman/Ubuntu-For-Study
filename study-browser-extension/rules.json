@@ -3,10 +3,7 @@
     "id": 1,
     "priority": 10,
     "action": {
-      "type": "redirect",
-      "redirect": {
-        "url": "https://www.youtube.com/"
-      }
+      "type": "block"
     },
     "condition": {
       "urlFilter": "||youtube.com/shorts/*",
@@ -17,10 +14,7 @@
     "id": 2,
     "priority": 10,
     "action": {
-      "type": "redirect",
-      "redirect": {
-        "url": "https://www.youtube.com/"
-      }
+      "type": "block"
     },
     "condition": {
       "urlFilter": "||youtu.be/shorts/*",
@@ -36,6 +30,83 @@
     "condition": {
       "urlFilter": "||youtube.com/youtubei/v1/reel/*",
       "resourceTypes": ["xmlhttprequest", "other"]
+    }
+  },
+  {
+    "id": 4,
+    "priority": 10,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||mmsgram.com/*",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media", "other"]
+    }
+  },
+  {
+    "id": 5,
+    "priority": 10,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||banglachotikahinii.com/*",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media", "other"]
+    }
+  },
+  {
+    "id": 6,
+    "priority": 10,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||banglachoti*/*",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media", "other"]
+    }
+  },
+  {
+    "id": 7,
+    "priority": 10,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||desimms*/*",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media", "other"]
+    }
+  },
+  {
+    "id": 8,
+    "priority": 10,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||chotikahini*/*",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media", "other"]
+    }
+  },
+  {
+    "id": 9,
+    "priority": 10,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||mmsleak*/*",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media", "other"]
+    }
+  },
+  {
+    "id": 10,
+    "priority": 10,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||mmsbee*/*",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media", "other"]
     }
   }
 ]

@@ -1,21 +1,28 @@
 /* StudyBrowser YouTube CSS: Pure Academic Lecture Interface */
 
 /* ==========================================================================
-   1. COMPLETELY BLANK YOUTUBE HOMEPAGE (No Recommendations)
+   1. COMPLETELY BLANK YOUTUBE HOMEPAGE (Search Only - Zero Recommendations)
    ========================================================================== */
 ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,
 ytd-browse[page-subtype="home"] #contents,
 ytd-browse[page-subtype="home"] #chips,
-ytd-browse[page-subtype="home"] ytd-feed-filter-chip-bar-renderer {
+ytd-browse[page-subtype="home"] ytd-feed-filter-chip-bar-renderer,
+ytd-two-column-browse-results-renderer[page-subtype="home"] ytd-rich-grid-renderer,
+ytd-two-column-browse-results-renderer[page-subtype="home"] #contents,
+ytd-two-column-browse-results-renderer[page-subtype="home"] #chips,
+ytd-two-column-browse-results-renderer[page-subtype="home"] ytd-feed-filter-chip-bar-renderer,
+ytd-browse:not([page-subtype="channels"]):not([page-subtype="playlist"]):not([page-subtype="history"]):not([page-subtype="subscriptions"]) ytd-rich-grid-renderer #contents,
+ytd-feed-filter-chip-bar-renderer,
+#chips {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
-  height: 0 !important;
   pointer-events: none !important;
 }
 
-/* Beautiful calm search prompt on the empty homepage */
-ytd-browse[page-subtype="home"] #primary::before {
+/* Clear calm instruction banner on empty homepage */
+ytd-browse[page-subtype="home"] #primary::before,
+ytd-two-column-browse-results-renderer[page-subtype="home"] #primary::before {
   content: "🎯 Use the search bar above to find your lecture or class video. Zero distractions • Pure focus.";
   display: block !important;
   text-align: center;
@@ -27,7 +34,7 @@ ytd-browse[page-subtype="home"] #primary::before {
 }
 
 /* ==========================================================================
-   2. HIDE ALL SIDE RECOMMENDATIONS ON WATCH PAGE (Lecture Mode)
+   2. HIDE ALL SIDE RECOMMENDATIONS ON WATCH PAGE (Pure Lecture Mode)
    ========================================================================== */
 #secondary,
 #secondary-inner,
@@ -59,6 +66,8 @@ ytd-watch-flexy[flexy][is-two-columns_] #columns.ytd-watch-flexy {
    ========================================================================== */
 ytd-reel-shelf-renderer,
 ytd-rich-shelf-renderer[is-shorts],
+ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
+ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
 ytd-reel-item-renderer,
 ytd-rich-item-renderer:has(a[href*="/shorts/"]),
 ytd-video-renderer:has(a[href*="/shorts/"]),

@@ -18,13 +18,70 @@ FB_TIMESTAMP = os.path.join(STATE_DIR, "fb.timestamp")
 REDDIT_TIMESTAMP = os.path.join(STATE_DIR, "reddit.timestamp")
 
 BASE_BLOCKED_URLS = [
+    # Social & Addictive Feeds
     "*://*.instagram.com/*",
     "*://*.threads.net/*",
     "*://*.tiktok.com/*",
     "*://*.twitter.com/*",
     "*://*.x.com/*",
     "*://*.snapchat.com/*",
-    "*://*.twitch.tv/*"
+    "*://*.twitch.tv/*",
+
+    # Regional & South Asian Adult/Leak Networks (Bengali, Desi, MMS)
+    "*://*mmsgram*/*",
+    "*://*mmsleak*/*",
+    "*://*mmsbee*/*",
+    "*://*desimms*/*",
+    "*://*banglachoti*/*",
+    "*://*choti*/*",
+    "*://*banglasex*/*",
+    "*://*desisex*/*",
+    "*://*bhabhi*/*",
+    "*://*antarchoti*/*",
+
+    # Global Adult Tubes, Webcams & OnlyFans Leaks
+    "*://*porn*/*",
+    "*://*xxx*/*",
+    "*://*xnxx*/*",
+    "*://*xvideos*/*",
+    "*://*xhamster*/*",
+    "*://*redtube*/*",
+    "*://*youporn*/*",
+    "*://*pornhub*/*",
+    "*://*spankbang*/*",
+    "*://*beeg*/*",
+    "*://*tnaflix*/*",
+    "*://*eporner*/*",
+    "*://*txxx*/*",
+    "*://*tube8*/*",
+    "*://*stripchat*/*",
+    "*://*chaturbate*/*",
+    "*://*bongacams*/*",
+    "*://*cam4*/*",
+    "*://*camsoda*/*",
+    "*://*livejasmin*/*",
+    "*://*myfreecams*/*",
+    "*://*streamate*/*",
+    "*://*onlyfans*/*",
+    "*://*fansly*/*",
+    "*://*manyvids*/*",
+    "*://*fapello*/*",
+    "*://*erome*/*",
+    "*://*coomer*/*",
+    "*://*kemono*/*",
+    "*://*thothub*/*",
+    "*://*hentai*/*",
+    "*://*nude*/*",
+    "*://*erotic*/*",
+    "*://*motherless*/*",
+    "*://*rule34*/*",
+    "*://*brazzers*/*",
+    "*://*bangbros*/*",
+    "*://*naughtyamerica*/*",
+    "*://*realitykings*/*",
+    "*://*vixen*/*",
+    "*://*blacked*/*",
+    "*://*tushy*/*"
 ]
 
 def get_desktop_user_info():
@@ -137,20 +194,28 @@ def sync():
         "*://*.fbsbx.com/*"
     ]
 
-    for pol_path in [CHROME_POLICY, BRAVE_POLICY]:
-        if os.path.exists(pol_path):
-            try:
+    CHROMIUM_POLICY = "/etc/chromium/policies/managed/study-restrictions.json"
+    for pol_path in [CHROME_POLICY, BRAVE_POLICY, CHROMIUM_POLICY]:
+        try:
+            os.makedirs(os.path.dirname(pol_path), exist_ok=True)
+            data = {}
+            if os.path.exists(pol_path):
                 with open(pol_path, "r") as f:
                     data = json.load(f)
-                data["URLBlocklist"] = unified_blocklist
-                data["URLAllowlist"] = unified_allowlist
-                data["SearchSuggestEnabled"] = False
-                data["AutoplayAllowed"] = False
-                data["NewTabPageLocation"] = "about:blank"
-                with open(pol_path, "w") as f:
-                    json.dump(data, f, indent=2)
-            except Exception:
-                pass
+            data["IncognitoModeAvailability"] = 1
+            data["ForceGoogleSafeSearch"] = True
+            data["ForceYouTubeSafetyMode"] = True
+            data["DnsOverHttpsMode"] = "off"
+            data["BackgroundModeEnabled"] = False
+            data["URLBlocklist"] = unified_blocklist
+            data["URLAllowlist"] = unified_allowlist
+            data["SearchSuggestEnabled"] = False
+            data["AutoplayAllowed"] = False
+            data["NewTabPageLocation"] = "about:blank"
+            with open(pol_path, "w") as f:
+                json.dump(data, f, indent=2)
+        except Exception:
+            pass
 
     # Flush DNS caches
     subprocess.run(["resolvectl", "flush-caches"], stderr=subprocess.DEVNULL)

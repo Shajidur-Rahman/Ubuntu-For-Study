@@ -124,6 +124,27 @@ ff02::3 ip6-allhosts
 
 # Reddit Base (Locked by default)
 0.0.0.0 reddit.com www.reddit.com old.reddit.com redd.it
+
+# Regional Adult, Bengali Choti & Leak Networks (Permanent Block)
+0.0.0.0 mmsgram.com www.mmsgram.com
+0.0.0.0 banglachotikahinii.com www.banglachotikahinii.com
+0.0.0.0 banglachoti.net www.banglachoti.net banglachoti.com www.banglachoti.com
+0.0.0.0 chotikahini.net www.chotikahini.net chotikahini.com www.chotikahini.com
+0.0.0.0 banglachoti69.com www.banglachoti69.com
+0.0.0.0 antarchoti.com www.antarchoti.com
+0.0.0.0 desimms.com www.desimms.com desimms.net www.desimms.net desimms.org www.desimms.org
+0.0.0.0 mmsleak.com www.mmsleak.com mmsbee.com www.mmsbee.com mmsbee.net www.mmsbee.net
+0.0.0.0 banglasex.net www.banglasex.net banglasex.com www.banglasex.com
+0.0.0.0 desisex.com www.desisex.com desisex.net www.desisex.net
+0.0.0.0 erome.com www.erome.com
+0.0.0.0 coomer.party coomer.su
+0.0.0.0 kemono.party kemono.su
+0.0.0.0 thothub.to thothub.is thothub.lol
+0.0.0.0 fapello.com www.fapello.com
+0.0.0.0 onlyfans.com www.onlyfans.com fansly.com www.fansly.com
+0.0.0.0 spankbang.com www.spankbang.com beeg.com www.beeg.com tnaflix.com www.tnaflix.com
+0.0.0.0 eporner.com www.eporner.com stripchat.com www.stripchat.com chaturbate.com www.chaturbate.com
+0.0.0.0 bongacams.com www.bongacams.com cam4.com www.cam4.com livejasmin.com www.livejasmin.com
 EOF
 
 echo "  Downloading StevenBlack porn-social blocklist..."
@@ -139,8 +160,8 @@ rm -f "$TMP_HOSTS"
 mkdir -p /etc/systemd/resolved.conf.d
 cat << 'EOF' > /etc/systemd/resolved.conf.d/strict-study-dns.conf
 [Resolve]
-DNS=1.1.1.3 1.0.0.3 2606:4700:4700::1113 2606:4700:4700::1003
-FallbackDNS=185.228.168.168 185.228.169.168
+DNS=1.1.1.3 94.140.14.15 185.228.168.168 1.0.0.3 2606:4700:4700::1113
+FallbackDNS=94.140.15.16 185.228.169.168
 Domains=~.
 DNSOverTLS=no
 DNSSEC=no
@@ -151,14 +172,15 @@ systemctl restart systemd-resolved
 resolvectl flush-caches 2>/dev/null || true
 
 # ------------------------------------------------------------------------------
-# 4. Browser Enterprise Hardening (Chrome, Brave, Firefox)
+# 4. Browser Enterprise Hardening (Chrome, Brave, Chromium, Firefox)
 # ------------------------------------------------------------------------------
 echo "[4/8] Enforcing browser enterprise policies..."
 
 CHROME_POLICY_DIR="/etc/opt/chrome/policies/managed"
 BRAVE_POLICY_DIR="/etc/brave/policies/managed"
+CHROMIUM_POLICY_DIR="/etc/chromium/policies/managed"
 FIREFOX_POLICY_DIR="/etc/firefox/policies"
-mkdir -p "$CHROME_POLICY_DIR" "$BRAVE_POLICY_DIR" "$FIREFOX_POLICY_DIR"
+mkdir -p "$CHROME_POLICY_DIR" "$BRAVE_POLICY_DIR" "$CHROMIUM_POLICY_DIR" "$FIREFOX_POLICY_DIR"
 
 cat << 'EOF' > "$CHROME_POLICY_DIR/study-restrictions.json"
 {
@@ -166,6 +188,7 @@ cat << 'EOF' > "$CHROME_POLICY_DIR/study-restrictions.json"
   "ForceGoogleSafeSearch": true,
   "ForceYouTubeSafetyMode": true,
   "DnsOverHttpsMode": "off",
+  "BackgroundModeEnabled": false,
   "SearchSuggestEnabled": false,
   "AutoplayAllowed": false,
   "NewTabPageLocation": "about:blank",
@@ -179,6 +202,61 @@ cat << 'EOF' > "$CHROME_POLICY_DIR/study-restrictions.json"
     "*://*.twitch.tv/*",
     "*://*.youtube.com/shorts/*",
     "*://*.youtu.be/shorts/*",
+    "*://youtube.com/shorts/*",
+    "*://youtu.be/shorts/*",
+    "*://*.youtube.com/youtubei/v1/reel/*",
+    "*://*mmsgram*/*",
+    "*://*mmsleak*/*",
+    "*://*mmsbee*/*",
+    "*://*desimms*/*",
+    "*://*banglachoti*/*",
+    "*://*choti*/*",
+    "*://*banglasex*/*",
+    "*://*desisex*/*",
+    "*://*bhabhi*/*",
+    "*://*antarchoti*/*",
+    "*://*porn*/*",
+    "*://*xxx*/*",
+    "*://*xnxx*/*",
+    "*://*xvideos*/*",
+    "*://*xhamster*/*",
+    "*://*redtube*/*",
+    "*://*youporn*/*",
+    "*://*pornhub*/*",
+    "*://*spankbang*/*",
+    "*://*beeg*/*",
+    "*://*tnaflix*/*",
+    "*://*eporner*/*",
+    "*://*txxx*/*",
+    "*://*tube8*/*",
+    "*://*stripchat*/*",
+    "*://*chaturbate*/*",
+    "*://*bongacams*/*",
+    "*://*cam4*/*",
+    "*://*camsoda*/*",
+    "*://*livejasmin*/*",
+    "*://*myfreecams*/*",
+    "*://*streamate*/*",
+    "*://*onlyfans*/*",
+    "*://*fansly*/*",
+    "*://*manyvids*/*",
+    "*://*fapello*/*",
+    "*://*erome*/*",
+    "*://*coomer*/*",
+    "*://*kemono*/*",
+    "*://*thothub*/*",
+    "*://*hentai*/*",
+    "*://*nude*/*",
+    "*://*erotic*/*",
+    "*://*motherless*/*",
+    "*://*rule34*/*",
+    "*://*brazzers*/*",
+    "*://*bangbros*/*",
+    "*://*naughtyamerica*/*",
+    "*://*realitykings*/*",
+    "*://*vixen*/*",
+    "*://*blacked*/*",
+    "*://*tushy*/*",
     "*://*.facebook.com/*"
   ],
   "URLAllowlist": [
@@ -198,6 +276,7 @@ cat << 'EOF' > "$CHROME_POLICY_DIR/study-restrictions.json"
 EOF
 
 cp "$CHROME_POLICY_DIR/study-restrictions.json" "$BRAVE_POLICY_DIR/study-restrictions.json"
+cp "$CHROME_POLICY_DIR/study-restrictions.json" "$CHROMIUM_POLICY_DIR/study-restrictions.json"
 
 cat << 'EOF' > "$FIREFOX_POLICY_DIR/policies.json"
 {
@@ -218,6 +297,61 @@ cat << 'EOF' > "$FIREFOX_POLICY_DIR/policies.json"
         "*://*.twitch.tv/*",
         "*://*.youtube.com/shorts/*",
         "*://*.youtu.be/shorts/*",
+        "*://youtube.com/shorts/*",
+        "*://youtu.be/shorts/*",
+        "*://*.youtube.com/youtubei/v1/reel/*",
+        "*://*mmsgram*/*",
+        "*://*mmsleak*/*",
+        "*://*mmsbee*/*",
+        "*://*desimms*/*",
+        "*://*banglachoti*/*",
+        "*://*choti*/*",
+        "*://*banglasex*/*",
+        "*://*desisex*/*",
+        "*://*bhabhi*/*",
+        "*://*antarchoti*/*",
+        "*://*porn*/*",
+        "*://*xxx*/*",
+        "*://*xnxx*/*",
+        "*://*xvideos*/*",
+        "*://*xhamster*/*",
+        "*://*redtube*/*",
+        "*://*youporn*/*",
+        "*://*pornhub*/*",
+        "*://*spankbang*/*",
+        "*://*beeg*/*",
+        "*://*tnaflix*/*",
+        "*://*eporner*/*",
+        "*://*txxx*/*",
+        "*://*tube8*/*",
+        "*://*stripchat*/*",
+        "*://*chaturbate*/*",
+        "*://*bongacams*/*",
+        "*://*cam4*/*",
+        "*://*camsoda*/*",
+        "*://*livejasmin*/*",
+        "*://*myfreecams*/*",
+        "*://*streamate*/*",
+        "*://*onlyfans*/*",
+        "*://*fansly*/*",
+        "*://*manyvids*/*",
+        "*://*fapello*/*",
+        "*://*erome*/*",
+        "*://*coomer*/*",
+        "*://*kemono*/*",
+        "*://*thothub*/*",
+        "*://*hentai*/*",
+        "*://*nude*/*",
+        "*://*erotic*/*",
+        "*://*motherless*/*",
+        "*://*rule34*/*",
+        "*://*brazzers*/*",
+        "*://*bangbros*/*",
+        "*://*naughtyamerica*/*",
+        "*://*realitykings*/*",
+        "*://*vixen*/*",
+        "*://*blacked*/*",
+        "*://*tushy*/*",
         "*://*.facebook.com/*"
       ],
       "Exceptions": [
@@ -294,6 +428,25 @@ cat << 'EOF' > "$BIN_DIR/brave-browser"
 exec /usr/bin/brave-browser --load-extension=/usr/share/study-browser/extension "$@"
 EOF
 chmod 755 "$BIN_DIR/brave-browser"
+ln -sf "$BIN_DIR/brave-browser" "$BIN_DIR/brave"
+ln -sf "$BIN_DIR/brave-browser" "$BIN_DIR/brave-browser-stable"
+
+# Also deploy user-level wrappers for seamless execution
+cat << EOF > "$USER_BIN/google-chrome-stable"
+#!/bin/bash
+exec /usr/bin/google-chrome-stable --load-extension="$USER_EXT_DIR" "\$@"
+EOF
+chmod 755 "$USER_BIN/google-chrome-stable"
+ln -sf "$USER_BIN/google-chrome-stable" "$USER_BIN/google-chrome"
+
+cat << EOF > "$USER_BIN/brave-browser"
+#!/bin/bash
+exec /usr/bin/brave-browser --load-extension="$USER_EXT_DIR" "\$@"
+EOF
+chmod 755 "$USER_BIN/brave-browser"
+ln -sf "$USER_BIN/brave-browser" "$USER_BIN/brave"
+ln -sf "$USER_BIN/brave-browser" "$USER_BIN/brave-browser-stable"
+chown -R "$TARGET_USER:$TARGET_USER" "$USER_BIN"
 
 # Configure passwordless sudo for study daemon
 cat << EOF > /etc/sudoers.d/study-timer

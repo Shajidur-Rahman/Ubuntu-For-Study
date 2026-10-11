@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "StudyBrowser Guardian Engine",
-  "version": "1.1.0",
-  "description": "Enforces strict academic focus: Zero YouTube Shorts, blank homepage, zero watch recommendations, and 4 Facebook study groups.",
+  "version": "1.2.0",
+  "description": "Enforces strict academic focus: Zero YouTube Shorts, blank homepage, zero watch recommendations, 4 Facebook study groups, and comprehensive adult content eradication.",
   "permissions": [
     "declarativeNetRequest",
     "webNavigation",
@@ -10,11 +10,7 @@
     "storage"
   ],
   "host_permissions": [
-    "*://*.youtube.com/*",
-    "*://*.youtu.be/*",
-    "*://*.facebook.com/*",
-    "*://*.fbcdn.net/*",
-    "*://*.fbsbx.com/*"
+    "<all_urls>"
   ],
   "declarative_net_request": {
     "rule_resources": [
@@ -73,6 +69,7 @@
         "dashboard.html",
         "blocked_fb.html",
         "blocked_shorts.html",
+        "blocked_adult.html",
         "style_facebook.css",
         "style_youtube.css"
       ],

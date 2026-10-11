@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⛔ Adult Content Blocked • Study Guardian</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    body {
+      background-color: #0b0d13;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .box {
+      max-width: 600px;
+      background: #141824;
+      border: 1px solid #ef4444;
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 20px 40px -10px rgba(239, 68, 68, 0.22);
+    }
+    .icon {
+      font-size: 3.8rem;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: 1.7rem;
+      color: #f87171;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+    .target-badge {
+      display: inline-block;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      background: #201724;
+      border: 1px solid #7f1d1d;
+      color: #fca5a5;
+      font-family: monospace;
+      font-size: 0.88rem;
+      padding: 6px 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .quote {
+      font-style: italic;
+      color: #cbd5e1;
+      border-left: 3px solid #ef4444;
+      padding-left: 14px;
+      text-align: left;
+      margin: 0 auto 28px auto;
+      max-width: 480px;
+      font-size: 0.95rem;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #dc2626;
+    }
+    .btn-secondary {
+      background: #1e2436;
+      border: 1px solid #333d59;
+      color: #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #252e45;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="icon">🛡️</div>
+    <h1>Adult Content Strictly Blocked</h1>
+    <div id="target-badge" class="target-badge" style="display: none;"></div>
+    <div class="quote">
+      "Deep discipline is the bridge between goals and accomplishment. Protect your mind."
+    </div>
+    <p>
+      This computer is dedicated exclusively to academic excellence and exam preparation.
+      Access to adult, explicit, or pornographic websites is permanently disabled across all browsers and network layers.
+    </p>
+
+    <div class="btn-row">
+      <a href="https://www.youtube.com/" class="btn btn-primary">📺 Open Class Lectures</a>
+      <a href="dashboard.html" class="btn btn-secondary">← StudyBrowser Portal</a>
+    </div>
+  </div>
+
+  <script>
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const site = params.get('site') || params.get('target') || params.get('attempt');
+      if (site) {
+        const badge = document.getElementById('target-badge');
+        let displayHost = site;
+        try {
+          const u = new URL(site.startsWith('http') ? site : 'https://' + site);
+          displayHost = u.hostname;
+        } catch (e) {}
+        badge.textContent = 'Blocked Destination: ' + displayHost;
+        badge.style.display = 'inline-block';
+      }
+    } catch(e) {}
+  </script>
+</body>
+</html>

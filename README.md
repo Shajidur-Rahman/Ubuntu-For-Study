@@ -83,24 +83,27 @@ Willpower is finite. When studying for competitive examinations, modern web plat
 
 ---
 
-### 1. 🛡️ 3-Tier Network & Distraction Sinkhole
+### 1. 🛡️ 4-Tier Network & Adult Content Sinkhole
 
 1. **Kernel-Level Immutable Sinkhole (`/etc/hosts`):**
    - Merges curated 150,000+ domain adult & social sinkholes (StevenBlack pornography-social filter).
+   - Explicit sinkholes for regional adult networks (Bengali choti blogs, MMS leaks, Desi adult hubs like `mmsgram.com`, `banglachotikahinii.com`, `desimms.com`, etc.).
    - Core compulsive platforms (`instagram.com`, `tiktok.com`, `x.com`, `threads.net`, `snapchat.com`, `twitch.tv`) are routed to `0.0.0.0`.
    - The file is protected with the ext4 immutable attribute (`chattr +i`).
    - `web.whatsapp.com` is explicitly whitelisted for essential family & student messaging.
 
 2. **Encrypted Family DNS Enforcement (`systemd-resolved`):**
-   - Directs all system DNS through Cloudflare Family DNS (`1.1.1.3` / `1.0.0.3`) with CleanBrowsing fallback.
-   - DoH/DoT bypass canaries (`use-application-dns.net`) are sinkholed to prevent browser evasion.
+   - Directs all system DNS through Cloudflare Family DNS (`1.1.1.3` / `1.0.0.3`), AdGuard Family (`94.140.14.15`), and CleanBrowsing Adult (`185.228.168.168`).
+   - DoH/DoT bypass canaries (`use-application-dns.net`, `dns.google`, `cloudflare-dns.com`) are sinkholed to prevent browser evasion.
 
-3. **Unified Enterprise Browser Hardening (Chrome, Brave, Firefox):**
+3. **Unified Enterprise Browser Hardening (Chrome, Brave, Chromium, Firefox):**
    - Enforces `URLBlocklist` and `URLAllowlist` machine-wide across all browsers:
+     - **Complete Adult & Explicit Eradication:** Wildcards covering all adult tubes, regional leak blogs, webcams, OnlyFans leaks (`*://*porn*/*`, `*://*xxx*/*`, `*://*choti*/*`, `*://*mmsgram*/*`, `*://*desimms*/*`, `*://*onlyfans*/*`, etc.).
      - **YouTube Shorts Eradication:** `*://*.youtube.com/shorts/*` blocked at the network engine layer.
      - **Facebook Restricted to 4 Groups:** `*://*.facebook.com/*` blocked except the 4 authorized academic groups and group video streams.
      - **Permanent Blocks:** Instagram, Threads, TikTok, Twitter/X, Snapchat, Twitch.
    - Private / Incognito browsing is strictly disabled.
+   - Background browser persistence disabled (`BackgroundModeEnabled: false`) so processes cannot linger silently.
    - Search suggestions disabled to prevent clickbait prompts.
    - New tab redirected to `about:blank`.
 
