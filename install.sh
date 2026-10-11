@@ -112,9 +112,11 @@ ff02::3 ip6-allhosts
 0.0.0.0 snapchat.com www.snapchat.com
 0.0.0.0 twitch.tv www.twitch.tv pinterest.com www.pinterest.com
 
-# DoH Bypass Canaries
-0.0.0.0 use-application-dns.net
-0.0.0.0 doh.dns.apple.com
+# DoH / Secure DNS Bypass Endpoints (Forces browsers to use local filtered DNS)
+0.0.0.0 dns.google dns.google.com
+0.0.0.0 cloudflare-dns.com one.one.one.one mozilla.cloudflare-dns.com
+0.0.0.0 use-application-dns.net doh.dns.apple.com
+0.0.0.0 dns.quad9.net doh.cleanbrowsing.org dns.adguard.com doh.mullvad.net
 
 # Facebook Base (Locked by default)
 0.0.0.0 facebook.com www.facebook.com m.facebook.com l.facebook.com
@@ -278,6 +280,20 @@ if [ -d "$SCRIPT_DIR/study-browser-extension" ]; then
     cp -r "$SCRIPT_DIR/study-browser-extension/"* "$USER_EXT_DIR/"
     chown -R "$TARGET_USER:$TARGET_USER" "$TARGET_HOME/.config/study-browser"
 fi
+
+# Preload Guardian Extension into Chrome and Brave system-wide
+cat << 'EOF' > "$BIN_DIR/google-chrome-stable"
+#!/bin/bash
+exec /usr/bin/google-chrome-stable --load-extension=/usr/share/study-browser/extension "$@"
+EOF
+chmod 755 "$BIN_DIR/google-chrome-stable"
+ln -sf "$BIN_DIR/google-chrome-stable" "$BIN_DIR/google-chrome"
+
+cat << 'EOF' > "$BIN_DIR/brave-browser"
+#!/bin/bash
+exec /usr/bin/brave-browser --load-extension=/usr/share/study-browser/extension "$@"
+EOF
+chmod 755 "$BIN_DIR/brave-browser"
 
 # Configure passwordless sudo for study daemon
 cat << EOF > /etc/sudoers.d/study-timer
