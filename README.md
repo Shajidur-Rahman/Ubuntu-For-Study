@@ -98,7 +98,7 @@ Willpower is finite. When studying for competitive examinations, modern web plat
 3. **Enterprise Browser Policies (Chrome, Brave, Firefox):**
    - Enforces `URLBlocklist` at the operating system policy layer.
    - Private / Incognito browsing is strictly disabled.
-   - Forces Google SafeSearch & YouTube Restricted Mode for academic lectures.
+   - **Blocks YouTube in Standard Chrome & Firefox:** Forces the student to open YouTube exclusively inside **StudyBrowser**, guaranteeing Shorts cannot be accessed.
    - Search suggestions disabled to prevent clickbait prompts.
    - New tab redirected to `about:blank`.
 

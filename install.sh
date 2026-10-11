@@ -174,11 +174,33 @@ cat << 'EOF' > "$CHROME_POLICY_DIR/study-restrictions.json"
     "*://*.twitter.com/*",
     "*://*.x.com/*",
     "*://*.snapchat.com/*",
+    "*://*.twitch.tv/*",
+    "*://*.youtube.com/*",
+    "*://*.youtu.be/*"
+  ]
+}
+EOF
+
+cat << 'EOF' > "$BRAVE_POLICY_DIR/study-restrictions.json"
+{
+  "IncognitoModeAvailability": 1,
+  "ForceGoogleSafeSearch": true,
+  "ForceYouTubeSafetyMode": true,
+  "DnsOverHttpsMode": "off",
+  "SearchSuggestEnabled": false,
+  "AutoplayAllowed": false,
+  "NewTabPageLocation": "about:blank",
+  "URLBlocklist": [
+    "*://*.instagram.com/*",
+    "*://*.threads.net/*",
+    "*://*.tiktok.com/*",
+    "*://*.twitter.com/*",
+    "*://*.x.com/*",
+    "*://*.snapchat.com/*",
     "*://*.twitch.tv/*"
   ]
 }
 EOF
-cp "$CHROME_POLICY_DIR/study-restrictions.json" "$BRAVE_POLICY_DIR/study-restrictions.json"
 
 cat << 'EOF' > "$FIREFOX_POLICY_DIR/policies.json"
 {
@@ -196,7 +218,9 @@ cat << 'EOF' > "$FIREFOX_POLICY_DIR/policies.json"
         "*://*.twitter.com/*",
         "*://*.x.com/*",
         "*://*.snapchat.com/*",
-        "*://*.twitch.tv/*"
+        "*://*.twitch.tv/*",
+        "*://*.youtube.com/*",
+        "*://*.youtu.be/*"
       ]
     }
   }

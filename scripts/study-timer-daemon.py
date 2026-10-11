@@ -117,14 +117,17 @@ def sync():
         f.writelines(filtered_lines)
     subprocess.run(["chattr", "+i", CURRENT_HOSTS], stderr=subprocess.DEVNULL)
 
-    # Chrome / Brave policy sync
-    url_blocklist = list(BASE_BLOCKED_URLS)
-    for pol_path in [CHROME_POLICY, BRAVE_POLICY]:
+    # Chrome / Brave policy sync:
+    # Block YouTube in regular Chrome to force the user to use StudyBrowser
+    chrome_blocklist = list(BASE_BLOCKED_URLS) + ["*://*.youtube.com/*", "*://*.youtu.be/*"]
+    brave_blocklist = list(BASE_BLOCKED_URLS)
+
+    for pol_path, blist in [(CHROME_POLICY, chrome_blocklist), (BRAVE_POLICY, brave_blocklist)]:
         if os.path.exists(pol_path):
             try:
                 with open(pol_path, "r") as f:
                     data = json.load(f)
-                data["URLBlocklist"] = url_blocklist
+                data["URLBlocklist"] = blist
                 data["SearchSuggestEnabled"] = False
                 data["AutoplayAllowed"] = False
                 data["NewTabPageLocation"] = "about:blank"
