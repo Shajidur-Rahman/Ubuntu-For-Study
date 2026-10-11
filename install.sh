@@ -80,7 +80,7 @@ fi
 # ------------------------------------------------------------------------------
 echo "[2/8] Checking system dependencies..."
 apt-get update -qq
-apt-get install -y -qq curl python3 unzip e2fsprogs gnome-shell-extension-manager libglib2.0-bin-user >/dev/null
+apt-get install -y -qq curl python3 unzip e2fsprogs gnome-shell-extension-manager libglib2.0-bin >/dev/null
 
 # ------------------------------------------------------------------------------
 # 3. 3-Tier Network & Adult Filter (Hosts + Cloudflare Family DNS)
