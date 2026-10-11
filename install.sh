@@ -271,6 +271,12 @@ cat << 'EOF' > "$CHROME_POLICY_DIR/study-restrictions.json"
     "https://www.facebook.com/auth/*",
     "*://*.fbcdn.net/*",
     "*://*.fbsbx.com/*"
+  ],
+  "ExtensionInstallSources": [
+    "http://127.0.0.1:49152/*"
+  ],
+  "ExtensionInstallForcelist": [
+    "kmipjahpplnmohdfjbdbfdopdlpbapnn;http://127.0.0.1:49152/updates.xml"
   ]
 }
 EOF

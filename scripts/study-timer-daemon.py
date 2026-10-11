@@ -209,6 +209,8 @@ def sync():
             data["BackgroundModeEnabled"] = False
             data["URLBlocklist"] = unified_blocklist
             data["URLAllowlist"] = unified_allowlist
+            data["ExtensionInstallSources"] = ["http://127.0.0.1:49152/*"]
+            data["ExtensionInstallForcelist"] = ["kmipjahpplnmohdfjbdbfdopdlpbapnn;http://127.0.0.1:49152/updates.xml"]
             data["SearchSuggestEnabled"] = False
             data["AutoplayAllowed"] = False
             data["NewTabPageLocation"] = "about:blank"

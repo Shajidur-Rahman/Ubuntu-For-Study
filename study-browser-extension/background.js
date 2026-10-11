@@ -209,6 +209,34 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
   }
 });
 
+// 1b. Intercept Single Page App (History API pushState) navigations
+chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+  if (details.frameId !== 0) return;
+  const url = details.url;
+  if (!url || url.startsWith('chrome://') || url.startsWith('chrome-extension://')) return;
+
+  if (url.includes('youtube.com/shorts/') || url.includes('youtu.be/shorts/')) {
+    chrome.tabs.update(details.tabId, {
+      url: chrome.runtime.getURL('blocked_shorts.html')
+    });
+    return;
+  }
+
+  if (isAdultSite(url)) {
+    chrome.tabs.update(details.tabId, {
+      url: chrome.runtime.getURL('blocked_adult.html?site=' + encodeURIComponent(url))
+    });
+    return;
+  }
+
+  if (url.includes('facebook.com') && !isFacebookAllowed(url)) {
+    chrome.tabs.update(details.tabId, {
+      url: chrome.runtime.getURL('blocked_fb.html?attempt=' + encodeURIComponent(url))
+    });
+    return;
+  }
+});
+
 // 2. Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'redirect_blocked_fb') {

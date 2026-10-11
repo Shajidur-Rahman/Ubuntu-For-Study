@@ -1,28 +1,40 @@
 /* StudyBrowser YouTube CSS: Pure Academic Lecture Interface */
 
 /* ==========================================================================
-   1. COMPLETELY BLANK YOUTUBE HOMEPAGE (Search Only - Zero Recommendations)
+   1. COMPLETELY BLANK YOUTUBE HOMEPAGE (Search Bar Only - All Feeds Erased)
    ========================================================================== */
-ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,
-ytd-browse[page-subtype="home"] #contents,
-ytd-browse[page-subtype="home"] #chips,
-ytd-browse[page-subtype="home"] ytd-feed-filter-chip-bar-renderer,
-ytd-two-column-browse-results-renderer[page-subtype="home"] ytd-rich-grid-renderer,
-ytd-two-column-browse-results-renderer[page-subtype="home"] #contents,
-ytd-two-column-browse-results-renderer[page-subtype="home"] #chips,
-ytd-two-column-browse-results-renderer[page-subtype="home"] ytd-feed-filter-chip-bar-renderer,
-ytd-browse:not([page-subtype="channels"]):not([page-subtype="playlist"]):not([page-subtype="history"]):not([page-subtype="subscriptions"]) ytd-rich-grid-renderer #contents,
+ytd-browse[role="main"] #contents,
+ytd-browse[role="main"] ytd-rich-grid-renderer,
+ytd-browse[role="main"] ytd-rich-section-renderer,
+ytd-browse[role="main"] ytd-rich-item-renderer,
+ytd-browse ytd-rich-grid-renderer,
+ytd-browse #contents.ytd-rich-grid-renderer,
+ytd-browse ytd-rich-section-renderer,
+ytd-browse ytd-feed-filter-chip-bar-renderer,
+ytd-two-column-browse-results-renderer #contents,
+ytd-two-column-browse-results-renderer ytd-rich-grid-renderer,
+ytd-two-column-browse-results-renderer ytd-rich-section-renderer,
+ytd-two-column-browse-results-renderer ytd-feed-filter-chip-bar-renderer,
+ytd-two-column-browse-results-renderer #chips,
+ytd-rich-grid-renderer,
+ytd-rich-grid-row,
+ytd-rich-item-renderer,
+ytd-rich-section-renderer,
 ytd-feed-filter-chip-bar-renderer,
-#chips {
+#chips,
+#header-container {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
   pointer-events: none !important;
 }
 
-/* Clear calm instruction banner on empty homepage */
-ytd-browse[page-subtype="home"] #primary::before,
-ytd-two-column-browse-results-renderer[page-subtype="home"] #primary::before {
+/* Beautiful calm search prompt on empty homepage */
+ytd-browse[role="main"] #primary::before,
+ytd-browse #primary::before,
+ytd-two-column-browse-results-renderer #primary::before {
   content: "🎯 Use the search bar above to find your lecture or class video. Zero distractions • Pure focus.";
   display: block !important;
   text-align: center;

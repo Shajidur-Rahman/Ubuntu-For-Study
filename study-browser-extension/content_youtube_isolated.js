@@ -51,23 +51,27 @@
           v.pause();
           v.muted = true;
           v.src = '';
+          v.load();
         } catch (e) {}
       });
+      try { window.stop(); } catch(e) {}
       window.location.replace('https://www.youtube.com/');
       return;
     }
 
-    // 2. YouTube Homepage: Blank out feed recommendations
-    if (path === '/' || path === '') {
+    // 2. YouTube Homepage: Remove feed recommendations
+    if (path === '/' || path === '' || path === '/feed/explore' || path === '/feed/trending') {
       const grid = document.querySelector('ytd-rich-grid-renderer');
       if (grid) {
-        const contents = grid.querySelector('#contents');
-        if (contents) contents.style.setProperty('display', 'none', 'important');
+        grid.style.setProperty('display', 'none', 'important');
+        grid.remove();
       }
-      const chips = document.querySelector('#chips') || document.querySelector('ytd-feed-filter-chip-bar-renderer');
+      const chips = document.querySelector('ytd-feed-filter-chip-bar-renderer') || document.getElementById('chips');
       if (chips) {
         chips.style.setProperty('display', 'none', 'important');
+        chips.remove();
       }
+      document.querySelectorAll('ytd-rich-section-renderer, ytd-rich-item-renderer, ytd-rich-grid-row').forEach(el => el.remove());
     }
 
     // 3. YouTube Watch Page: Erase side recommendations
@@ -75,10 +79,12 @@
       const secondary = document.getElementById('secondary');
       if (secondary) {
         secondary.style.setProperty('display', 'none', 'important');
+        secondary.remove();
       }
       const related = document.getElementById('related');
       if (related) {
         related.style.setProperty('display', 'none', 'important');
+        related.remove();
       }
     }
   }
@@ -89,7 +95,7 @@
   setInterval(() => {
     enforceLectureMode();
     purgeShortsDOM();
-  }, 100);
+  }, 40);
 
   const observer = new MutationObserver(() => {
     purgeShortsDOM();
