@@ -95,22 +95,25 @@ Willpower is finite. When studying for competitive examinations, modern web plat
    - Directs all system DNS through Cloudflare Family DNS (`1.1.1.3` / `1.0.0.3`) with CleanBrowsing fallback.
    - DoH/DoT bypass canaries (`use-application-dns.net`) are sinkholed to prevent browser evasion.
 
-3. **Enterprise Browser Policies (Chrome, Brave, Firefox):**
-   - Enforces `URLBlocklist` at the operating system policy layer.
+3. **Unified Enterprise Browser Hardening (Chrome, Brave, Firefox):**
+   - Enforces `URLBlocklist` and `URLAllowlist` machine-wide across all browsers:
+     - **YouTube Shorts Eradication:** `*://*.youtube.com/shorts/*` blocked at the network engine layer.
+     - **Facebook Restricted to 4 Groups:** `*://*.facebook.com/*` blocked except the 4 authorized academic groups and group video streams.
+     - **Permanent Blocks:** Instagram, Threads, TikTok, Twitter/X, Snapchat, Twitch.
    - Private / Incognito browsing is strictly disabled.
-   - **Blocks YouTube in Standard Chrome & Firefox:** Forces the student to open YouTube exclusively inside **StudyBrowser**, guaranteeing Shorts cannot be accessed.
    - Search suggestions disabled to prevent clickbait prompts.
    - New tab redirected to `about:blank`.
 
 ---
 
-### 2. 🌐 StudyBrowser: Super Strict Academic Browser
+### 2. 🌐 Guardian Engine: Unified Protection Across All Browsers
 
-Because YouTube and Facebook operate as dynamic Single Page Applications (SPAs), traditional DNS and URL blockers fail to stop client-side feeds and Reels. **StudyBrowser** solves this by integrating a hardwired Chromium extension and isolated user environment:
+Whether you launch **Google Chrome**, **Brave**, or **StudyBrowser**, the **Guardian Engine** is automatically loaded to guarantee zero bypass:
 
-#### 🚫 100% YouTube Shorts Eradication
-* **Network & SPA Interception:** Drops all navigation requests to `/shorts/*` before a single frame can load, instantly bouncing back to `youtube.com/`.
-* **DOM Purifier:** Injected CSS and MutationObservers permanently remove the "Shorts" tab, homepage carousels (`ytd-reel-shelf-renderer`), and search result shelves.
+#### 🚫 YouTube: Pure Academic Mode
+* **100% Shorts Eradication:** Drops all navigation requests to `/shorts/*` before a single frame can load, instantly bouncing back to `youtube.com/`.
+* **Blank Homepage:** When you open YouTube, the recommended video feed is completely hidden. You see only a clean search bar. You search for what you need to study, and watch your lecture.
+* **Hidden Side Recommendations:** While watching a class video, the entire right sidebar of recommended videos and end-screen suggestions is completely removed.
 * **Full-Length Lectures Allowed:** Watch normal educational lectures (`/watch?v=...`) with clean video streaming and zero algorithmic rabbit holes.
 
 #### 🔒 Strictly 4 Authorized Facebook Groups Only

@@ -117,17 +117,33 @@ def sync():
         f.writelines(filtered_lines)
     subprocess.run(["chattr", "+i", CURRENT_HOSTS], stderr=subprocess.DEVNULL)
 
-    # Chrome / Brave policy sync:
-    # Block YouTube in regular Chrome to force the user to use StudyBrowser
-    chrome_blocklist = list(BASE_BLOCKED_URLS) + ["*://*.youtube.com/*", "*://*.youtu.be/*"]
-    brave_blocklist = list(BASE_BLOCKED_URLS)
+    # Chrome / Brave policy sync: Enforce identical strict policy across all Chromium browsers
+    unified_blocklist = list(BASE_BLOCKED_URLS) + [
+        "*://*.youtube.com/shorts/*",
+        "*://*.youtu.be/shorts/*",
+        "*://*.facebook.com/*"
+    ]
+    unified_allowlist = [
+        "https://www.facebook.com/groups/fabzoology27/*",
+        "https://www.facebook.com/groups/fabbotany27/*",
+        "https://www.facebook.com/groups/1612120089807832/*",
+        "https://www.facebook.com/groups/saikatvaisengineeringchemistryhsc26/*",
+        "https://www.facebook.com/login/*",
+        "https://www.facebook.com/checkpoint/*",
+        "https://www.facebook.com/two_factor/*",
+        "https://www.facebook.com/recover/*",
+        "https://www.facebook.com/auth/*",
+        "*://*.fbcdn.net/*",
+        "*://*.fbsbx.com/*"
+    ]
 
-    for pol_path, blist in [(CHROME_POLICY, chrome_blocklist), (BRAVE_POLICY, brave_blocklist)]:
+    for pol_path in [CHROME_POLICY, BRAVE_POLICY]:
         if os.path.exists(pol_path):
             try:
                 with open(pol_path, "r") as f:
                     data = json.load(f)
-                data["URLBlocklist"] = blist
+                data["URLBlocklist"] = unified_blocklist
+                data["URLAllowlist"] = unified_allowlist
                 data["SearchSuggestEnabled"] = False
                 data["AutoplayAllowed"] = False
                 data["NewTabPageLocation"] = "about:blank"

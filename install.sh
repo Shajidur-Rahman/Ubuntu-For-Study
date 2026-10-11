@@ -175,32 +175,27 @@ cat << 'EOF' > "$CHROME_POLICY_DIR/study-restrictions.json"
     "*://*.x.com/*",
     "*://*.snapchat.com/*",
     "*://*.twitch.tv/*",
-    "*://*.youtube.com/*",
-    "*://*.youtu.be/*"
+    "*://*.youtube.com/shorts/*",
+    "*://*.youtu.be/shorts/*",
+    "*://*.facebook.com/*"
+  ],
+  "URLAllowlist": [
+    "https://www.facebook.com/groups/fabzoology27/*",
+    "https://www.facebook.com/groups/fabbotany27/*",
+    "https://www.facebook.com/groups/1612120089807832/*",
+    "https://www.facebook.com/groups/saikatvaisengineeringchemistryhsc26/*",
+    "https://www.facebook.com/login/*",
+    "https://www.facebook.com/checkpoint/*",
+    "https://www.facebook.com/two_factor/*",
+    "https://www.facebook.com/recover/*",
+    "https://www.facebook.com/auth/*",
+    "*://*.fbcdn.net/*",
+    "*://*.fbsbx.com/*"
   ]
 }
 EOF
 
-cat << 'EOF' > "$BRAVE_POLICY_DIR/study-restrictions.json"
-{
-  "IncognitoModeAvailability": 1,
-  "ForceGoogleSafeSearch": true,
-  "ForceYouTubeSafetyMode": true,
-  "DnsOverHttpsMode": "off",
-  "SearchSuggestEnabled": false,
-  "AutoplayAllowed": false,
-  "NewTabPageLocation": "about:blank",
-  "URLBlocklist": [
-    "*://*.instagram.com/*",
-    "*://*.threads.net/*",
-    "*://*.tiktok.com/*",
-    "*://*.twitter.com/*",
-    "*://*.x.com/*",
-    "*://*.snapchat.com/*",
-    "*://*.twitch.tv/*"
-  ]
-}
-EOF
+cp "$CHROME_POLICY_DIR/study-restrictions.json" "$BRAVE_POLICY_DIR/study-restrictions.json"
 
 cat << 'EOF' > "$FIREFOX_POLICY_DIR/policies.json"
 {
@@ -219,8 +214,22 @@ cat << 'EOF' > "$FIREFOX_POLICY_DIR/policies.json"
         "*://*.x.com/*",
         "*://*.snapchat.com/*",
         "*://*.twitch.tv/*",
-        "*://*.youtube.com/*",
-        "*://*.youtu.be/*"
+        "*://*.youtube.com/shorts/*",
+        "*://*.youtu.be/shorts/*",
+        "*://*.facebook.com/*"
+      ],
+      "Exceptions": [
+        "https://www.facebook.com/groups/fabzoology27/*",
+        "https://www.facebook.com/groups/fabbotany27/*",
+        "https://www.facebook.com/groups/1612120089807832/*",
+        "https://www.facebook.com/groups/saikatvaisengineeringchemistryhsc26/*",
+        "https://www.facebook.com/login/*",
+        "https://www.facebook.com/checkpoint/*",
+        "https://www.facebook.com/two_factor/*",
+        "https://www.facebook.com/recover/*",
+        "https://www.facebook.com/auth/*",
+        "*://*.fbcdn.net/*",
+        "*://*.fbsbx.com/*"
       ]
     }
   }
