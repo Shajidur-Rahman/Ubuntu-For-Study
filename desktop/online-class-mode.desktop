@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Online Class Mode (Toggle Color)
+Comment=Click to toggle between Full Color for online lectures and Grayscale for study
+Exec=/usr/local/bin/toggle-bw
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Utility;Education;
+Keywords=study;lecture;online class;color;grayscale;

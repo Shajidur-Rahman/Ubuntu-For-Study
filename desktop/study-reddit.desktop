@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Reddit Access (14 Min Math Gate)
+Comment=Unlock Reddit for 14 minutes by solving HSC differentiation math and 5 conscience gates
+Exec=gnome-terminal -- /usr/local/bin/study-reddit
+Icon=accessories-calculator
+Terminal=false
+Type=Application
+Categories=Education;Utility;
+Keywords=study;reddit;timer;math;differentiation;

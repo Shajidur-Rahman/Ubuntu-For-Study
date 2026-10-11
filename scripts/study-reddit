@@ -1,0 +1,307 @@
+#!/usr/bin/env python3
+import sys
+import os
+import subprocess
+import time
+import random
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from hsc_math_engine import get_hsc_problem
+import study_lockout
+
+SERVICE = "reddit"
+
+# Diverse library of 20 powerful Quranic and Hadith conscience gates
+ISLAMIC_QUESTION_POOL = [
+    {
+        "topic": "THE ALL-SEEING WATCHER (Al-Muraqabah)",
+        "arabic": "« أَلَمْ يَعْلَم بِأَنَّ اللَّهَ يَرَىٰ »",
+        "reference": "Surah Al-'Alaq (96:14)",
+        "translation": "“Does he not know that Allah sees?”",
+        "reflection": "You may be alone in your room, but the Lord of the heavens and the earth is\nwatching every single movement of your fingers and every gaze of your eyes right now.",
+        "prompt": "Will you make a solemn promise before Allah to guard your gaze from any adult or shameful content on Reddit? (type 'yes'): "
+    },
+    {
+        "topic": "THE STEALTHY GLANCE OF THE EYE",
+        "arabic": "« يَعْلَمُ خَائِنَةَ الْأَعْيُنِ وَمَا تُخْفِي الصُّدُورُ »",
+        "reference": "Surah Ghafir (40:19)",
+        "translation": "“Allah knows the deception of the eyes and whatever the hearts conceal.”",
+        "reflection": "A quick stealthy glance that nobody else noticed is fully recorded in your book of deeds.\nNothing is hidden from Him.",
+        "prompt": "Do you acknowledge that every glance you cast on this screen is written down by the recording angels? (type 'yes'): "
+    },
+    {
+        "topic": "THE TESTIMONY OF YOUR OWN BODY",
+        "arabic": "« الْيَوْمَ نَخْتِمُ عَلَىٰ أَفْوَاهِهِمْ وَتُكَلِّمُنَا أَيْدِيهِمْ وَتَشْهَدُ أَرْجُلُهُم »",
+        "reference": "Surah Ya-Sin (36:65)",
+        "translation": "“On this Day, We will seal their mouths, their hands will speak to Us, and their feet will testify.”",
+        "reflection": "On the Day of Judgment, your mouth will be sealed shut, but these fingertips on your keyboard\nwill speak to Allah and testify to every link you clicked.",
+        "prompt": "Are you prepared for your own eyes and hands to testify about this session before your Creator? (type 'yes'): "
+    },
+    {
+        "topic": "THE QUESTIONING OF HEARING, SIGHT & HEART",
+        "arabic": "« إِنَّ السَّمْعَ وَالْبَصَرَ وَالْفُؤَادَ كُلُّ أُولَٰئِكَ كَانَ عَنْهُ مَسْئُولًا »",
+        "reference": "Surah Al-Isra (17:36)",
+        "translation": "“Indeed, the hearing, the sight, and the heart — about all of these one will be questioned.”",
+        "reflection": "Your eyesight is a sacred loan entrusted to you by Allah. It was not given to be contaminated\nby looking at nakedness or cheap digital filth.",
+        "prompt": "Will you honor the sacred trust of your eyesight and protect it during this session? (type 'yes'): "
+    },
+    {
+        "topic": "CLOSER THAN THE JUGULAR VEIN",
+        "arabic": "« وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنْ حَبْلِ الْوَرِيدِ »",
+        "reference": "Surah Qaf (50:16)",
+        "translation": "“And We are closer to him than his jugular vein.”",
+        "reflection": "Allah is nearer to you than the blood flowing through your neck.\nHow can you dare to look at filth while your Creator is with you?",
+        "prompt": "Do you feel the closeness of Allah right now and fear disobeying Him in secret? (type 'yes'): "
+    },
+    {
+        "topic": "SHAME BEFORE ALLAH VS. SHAME BEFORE PEOPLE",
+        "arabic": "« يَسْتَخْفُونَ مِنَ النَّاسِ وَلَا يَسْتَخْفُونَ مِنَ اللَّهِ وَهُوَ مَعَهُمْ »",
+        "reference": "Surah An-Nisa (4:108)",
+        "translation": "“They hide from people, but they cannot hide from Allah, and He is with them.”",
+        "reflection": "If your mother, father, or teacher walked in, you would slam this screen shut in shame.\nWhy are you shy before weak human beings, yet bold in sin before the King of the Universe?",
+        "prompt": "Do you value Allah's sight more than the opinion of any human being? (type 'yes'): "
+    },
+    {
+        "topic": "THE RECORDING ANGELS UPON YOUR SHOULDERS",
+        "arabic": "« مَّا يَلْفِظُ مِن قَوْلٍ إِلَّا لَدَيْهِ رَقِيبٌ عَتِيدٌ »",
+        "reference": "Surah Qaf (50:18)",
+        "translation": "“Not a word does he utter but there is with him an observer ready [to record].”",
+        "reflection": "The noble recording angels Raqib and Atid are seated beside you right now.\nWhat will they write in your eternal book during these next 10 minutes?",
+        "prompt": "Do you want only clean, honorable deeds written in your book of deeds right now? (type 'yes'): "
+    },
+    {
+        "topic": "THE SINS OF SECLUSION (Dreadful Warning)",
+        "arabic": "« إِذَا خَلَوْا بِمَحَارِمِ اللَّهِ انْتَهَكُوهَا »",
+        "reference": "Hadith (Sunan Ibn Majah #4245)",
+        "translation": "The Prophet (ﷺ) warned of believers on Judgment Day with good deeds like huge white mountains,\nbut Allah will turn them into scattered dust because: “When they were alone, they violated the prohibitions of Allah.”",
+        "reflection": "Private internet sins destroy mountains of prayers and fasting like dust in the wind.\nIs 5 minutes of cheap dopamine worth losing your Akhirah?",
+        "prompt": "Will you protect your good deeds from being wiped out by private sins of the eyes? (type 'yes'): "
+    },
+    {
+        "topic": "THE SACRED TRUST OF YOUR YOUTH & HSC EXAM",
+        "arabic": "« لَا تَزُولُ قَدَمَا عَبْدٍ يَوْمَ الْقِيَامَةِ حَتَّى يُسْأَلَ عَنْ عُمُرِهِ ... وَعَنْ شَبَابِهِ »",
+        "reference": "Hadith (Sunan At-Tirmidhi)",
+        "translation": "“A servant’s feet will not move on the Day of Resurrection until he is questioned about his life and his youth.”",
+        "reflection": "You are in the most critical period of your youth. Your HSC exams, your future, and your parents'\nhopes depend on your focus. Mindless Reddit browsing robs you of your intellect and discipline.",
+        "prompt": "Is opening Reddit right now genuinely necessary, and not just an escape from hard study? (type 'yes'): "
+    },
+    {
+        "topic": "THE SUDDEN ARRIVAL OF DEATH (Malak al-Mawt)",
+        "arabic": "« حَتَّىٰ إِذَا جَاءَ أَحَدَهُمُ الْمَوْتُ قَالَ رَبِّ ارْجِعُونِ »",
+        "reference": "Surah Al-Mu'minun (23:99)",
+        "translation": "“Until, when death comes to one of them, he says: 'My Lord, send me back that I might do good!'”",
+        "reflection": "What if the Angel of Death took your soul while you were scrolling this site?\nWould you want your final breath to be taken with Reddit on your screen?",
+        "prompt": "Do you remember that your life could end at any moment, and strive to die upon pure deeds? (type 'yes'): "
+    },
+    {
+        "topic": "PURPOSE VS. USELESS VANITY",
+        "arabic": "« أَفَحَسِبْتُمْ أَنَّمَا خَلَقْنَاكُمْ عَبَثًا وَأَنَّكُمْ إِلَيْنَا لَا تُرْجَعُونَ »",
+        "reference": "Surah Al-Mu'minun (23:115)",
+        "translation": "“Did you then think that We created you uselessly and that to Us you would not be returned?”",
+        "reflection": "You were created for greatness, knowledge, and Jannah — not to waste your brain\non endless internet arguments, memes, and lust.",
+        "prompt": "Do you affirm that your time on earth is a sacred purpose and not for vanity? (type 'yes'): "
+    },
+    {
+        "topic": "THE DELUSION OF THIS FLEETING WORLD",
+        "arabic": "« فَلَا تَغُرَّنَّكُمُ الْحَيَاةُ الدُّنْيَا وَلَا يَغُرَّنَّكُم بِاللَّهِ الْغَرُورُ »",
+        "reference": "Surah Fatir (35:5)",
+        "translation": "“So let not the worldly life delude you and be not deceived by the Deceiver concerning Allah.”",
+        "reflection": "The internet is Shaytan’s biggest trap to make you forget your prayers, your exams, and your grave.\nWake up from the digital trance.",
+        "prompt": "Will you remain awake and refuse to let the screen hypnotize your mind? (type 'yes'): "
+    },
+    {
+        "topic": "PURIFYING THE SOUL (Tazkiyah)",
+        "arabic": "« قَدْ أَفْلَحَ مَن زَكَّاهَا * وَقَدْ خَابَ مَن دَسَّاهَا »",
+        "reference": "Surah Ash-Shams (91:9-10)",
+        "translation": "“He has succeeded who purifies it, and he has failed who corrupts it.”",
+        "reflection": "Every shameless image darkens the spiritual heart and robs you of peace of mind.\nPurity brings light, sharp memory, and barakah into your studies.",
+        "prompt": "Do you choose the purification of your soul over the poison of dirty images? (type 'yes'): "
+    },
+    {
+        "topic": "THE COMMAND TO LOWER THE GAZE",
+        "arabic": "« قُل لِّلْمُؤْمِنِينَ يَغُضُّوا مِنْ أَبْصَارِهِمْ وَيَحْفَظُوا فُرُوجَهُمْ ذَٰلِكَ أَزْكَىٰ لَهُمْ »",
+        "reference": "Surah An-Nur (24:30)",
+        "translation": "“Tell the believing men to lower their gaze and guard their private parts. That is purer for them.”",
+        "reflection": "Lowering your gaze is not optional; it is a direct order from the Creator of the universe.\nIt brings an immediate sweetness of faith into the chest of whoever obeys it.",
+        "prompt": "Will you obey Allah’s command and lower your gaze strictly on this site? (type 'yes'): "
+    },
+    {
+        "topic": "THE VALUE OF FREE TIME (A Lost Blessing)",
+        "arabic": "« نِعْمَتَانِ مَغْبُونٌ فِيهِمَا كَثِيرٌ مِنَ النَّاسِ: الصِّحَّةُ وَالْفَرَاغُ »",
+        "reference": "Hadith (Sahih Al-Bukhari #6412)",
+        "translation": "The Prophet (ﷺ) said: “There are two blessings which many people lose: health and free time.”",
+        "reflection": "Millions of people in the grave would give the entire earth to have 10 minutes of life\nto say 'SubhanAllah' or do one beneficial deed. Do not squander your time.",
+        "prompt": "Do you treat this 10-minute session as a strict, limited trust? (type 'yes'): "
+    },
+    {
+        "topic": "STRIVING FOR ALLAH (Jihad an-Nafs)",
+        "arabic": "« وَالَّذِينَ جَاهَدُوا فِينَا لَنَهْدِيَنَّهُمْ سُبُلَنَا »",
+        "reference": "Surah Al-Ankabut (29:69)",
+        "translation": "“And those who strive for Us — We will surely guide them to Our ways.”",
+        "reflection": "Resisting the urge to open bad sites when nobody is watching is one of the highest forms\nof striving in the sight of Allah. Allah sees your struggle and will reward your patience.",
+        "prompt": "Will you fight your nafs and refuse to surrender to base desires? (type 'yes'): "
+    },
+    {
+        "topic": "PROTECTING YOURSELF FROM THE FIRE",
+        "arabic": "« يَا أَيُّهَا الَّذِينَ آمَنُوا قُوا أَنفُسَكُمْ وَأَهْلِيكُمْ نَارًا »",
+        "reference": "Surah At-Tahrim (66:6)",
+        "translation": "“O you who have believed, protect yourselves and your families from a Fire whose fuel is people and stones.”",
+        "reflection": "The temporary pleasure of looking at haram lasts 3 seconds, but the regret lasts for days\nand the punishment in the Akhirah is beyond imagination.",
+        "prompt": "Do you seek Allah’s protection from the Fire and turn away from all shamelessness? (type 'yes'): "
+    },
+    {
+        "topic": "THE FINAL RETURN TO ALLAH",
+        "arabic": "« وَاتَّقُوا يَوْمًا تُرْجَعُونَ فِيهِ إِلَى اللَّهِ ثُمَّ تُوَفَّىٰ كُلُّ نَفْسٍ مَّا كَسَبَتْ »",
+        "reference": "Surah Al-Baqarah (2:281)",
+        "translation": "“And fear a Day when you will be returned to Allah. Then every soul will be compensated for what it earned.”",
+        "reflection": "The last verse revealed in the Quran reminds us that every single deed will be repaid in full.\nMake sure what is on your screen brings honor on that Day.",
+        "prompt": "Do you swear before Allah to maintain strict dignity and leave the moment your 10 minutes end? (type 'yes'): "
+    },
+    {
+        "topic": "IHSAN (True Excellence)",
+        "arabic": "« أَنْ تَعْبُدَ اللَّهَ كَأَنَّكَ تَرَاهُ ، فَإِنْ لَمْ تَكُنْ تَرَاهُ فَإِنَّهُ يَرَاكَ »",
+        "reference": "Hadith Jibril (Sahih Muslim)",
+        "translation": "“Excellence is to worship Allah as though you see Him; and if you cannot see Him, truly He sees you.”",
+        "reflection": "Browse as though Allah is standing right before you watching your eyes — because He is.",
+        "prompt": "Will you embody this awareness of Allah throughout this session? (type 'yes'): "
+    },
+    {
+        "topic": "THE ATOM’S WEIGHT OF GOOD AND EVIL",
+        "arabic": "« فَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ * وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ شَرًّا يَرَهُ »",
+        "reference": "Surah Az-Zalzalah (99:7-8)",
+        "translation": "“So whoever does an atom's weight of good will see it, and whoever does an atom's weight of evil will see it.”",
+        "reflection": "Every second of restraint is recorded as an atom of light. Every willful slip is recorded as darkness.\nChoose light.",
+        "prompt": "Do you choose the path of light, purity, and self-restraint right now? (type 'yes'): "
+    }
+]
+
+def check_status():
+    res = subprocess.run(["sudo", "/usr/local/bin/study-timer-daemon", "status", SERVICE], capture_output=True, text=True)
+    return res.stdout.strip()
+
+def run_islamic_gates():
+    print("\n" + "=" * 65)
+    print("      SPIRITUAL CONSCIENCE GATES: 5 REFLECTIONS")
+    print("=" * 65)
+    print(" Math calculation verified. Now, reflect upon the weight of your soul.")
+    print(" Answer with complete honesty before Allah. You must affirm all 5 in a row.\n")
+
+    # Sample 5 unique questions randomly from the pool of 20
+    selected_questions = random.sample(ISLAMIC_QUESTION_POOL, 5)
+
+    for i, q in enumerate(selected_questions):
+        print("─" * 65)
+        print(f"  GATE {i+1} / 5: {q['topic']}")
+        print(f"  {q['arabic']}")
+        print(f"  {q['reference']}")
+        print(f"  {q['translation']}\n")
+        print(f"  {q['reflection']}")
+        print("─" * 65)
+
+        try:
+            ans = input(f"\n{q['prompt']}").strip().lower()
+        except (KeyboardInterrupt, EOFError):
+            print("\n\nSession aborted.")
+            return False
+
+        if ans != "yes":
+            print("\n" + "*" * 65)
+            print("  [✓] ALHAMDULILLAH! You chose Allah over a fleeting impulse.")
+            print("  « وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا »")
+            print("  'And whoever fears Allah — He will make for him a way out.' (65:2)")
+            print("  Reddit remains LOCKED. Return to your studies with pride and honor!")
+            print("*" * 65 + "\n")
+            return False
+        
+        print("\n  [✓] Confirmed. Proceeding to next conscience gate...\n")
+        time.sleep(0.6)
+
+    return True
+
+def main():
+    print("=" * 65)
+    print("          REDDIT - HSC INTENTIONAL ACCESS MATH GATE")
+    print("=" * 65)
+
+    # 1. Check 30-minute lockout
+    is_locked, rem_mins = study_lockout.check_lockout(SERVICE)
+    if is_locked:
+        print("\n" + "!" * 65)
+        print("  ⛔ ACCESS TEMPORARILY LOCKED OUT!")
+        print(f"  You failed 3 math attempts earlier.")
+        print(f"  Penalty active: {rem_mins} minute(s) remaining.")
+        print("  No math challenges or access are permitted during lockout.")
+        print("  Step away from the screen and focus on your offline study!")
+        print("!" * 65 + "\n")
+        sys.exit(1)
+
+    # 2. Check if currently active
+    status = check_status()
+    if status.startswith("UNLOCKED"):
+        print(f"\n[!] Reddit is CURRENTLY ACTIVE: {status}")
+        choice = input("\nDo you want to (1) Keep using it, or (2) Lock it now? [1/2]: ").strip()
+        if choice == "2":
+            subprocess.run(["sudo", "/usr/local/bin/study-timer-daemon", "lock", SERVICE])
+            print("[✓] Reddit has been locked immediately. Excellent self-control!")
+        return
+
+    attempts_left = study_lockout.get_attempts_left(SERVICE)
+    print(f"\n[STATUS] You have {attempts_left} of 3 attempt(s) remaining.")
+    print("WARNING: 3 failed attempts will trigger an automatic 30-MINUTE LOCKOUT.\n")
+    print("Take out your paper, pencil, and calculate carefully (2-3 mins):\n")
+
+    problem_text, correct_answer = get_hsc_problem()
+    print("-" * 65)
+    print(problem_text)
+    print("-" * 65)
+
+    try:
+        user_input = input("\nYour calculated answer (integer): ").strip()
+    except (KeyboardInterrupt, EOFError):
+        print("\nAborted.")
+        return
+
+    is_valid_int = user_input.lstrip("-").isdigit() and len(user_input.lstrip("-")) > 0
+
+    if is_valid_int and int(user_input) == correct_answer:
+        study_lockout.record_success(SERVICE)
+        print("\n" + "=" * 65)
+        print("  [✓] CORRECT! HSC CALCULATION VERIFIED.")
+        print("=" * 65)
+
+        # 3. Present the 5 randomized Islamic conscience gates
+        passed_spiritual_gates = run_islamic_gates()
+        if not passed_spiritual_gates:
+            sys.exit(0)
+
+        # 4. If all 5 passed, unlock for 10 minutes
+        print("\n" + "=" * 65)
+        print("  [✓] ALL 5 GATES PASSED. UNLOCKING REDDIT FOR 14 MINUTES.")
+        print("  Remember your promises to Allah. The timer is running.")
+        print("=" * 65)
+
+        subprocess.run(["sudo", "/usr/local/bin/study-timer-daemon", "unlock", SERVICE, "14"])
+        print("\n[✓] Reddit is now unlocked for 14 minutes.")
+        print("After 14 minutes, Reddit will auto-lock automatically.\n")
+        input("Press Enter to close this terminal (timer continues in background)...")
+
+    else:
+        rem, is_now_locked = study_lockout.record_failure(SERVICE)
+        if is_now_locked:
+            print("\n" + "!" * 65)
+            print(f"  [✗] INCORRECT! (The correct answer was {correct_answer})")
+            print("  ⛔ 3 FAILED ATTEMPTS REACHED.")
+            print("  PENALTY APPLIED: You are now LOCKED OUT for 30 MINUTES.")
+            print("  No more challenges allowed. Return to your books!")
+            print("!" * 65 + "\n")
+            sys.exit(1)
+        else:
+            print("\n" + "-" * 65)
+            print(f"  [✗] INCORRECT ANSWER!")
+            print(f"  You have {rem} attempt(s) left before a 30-minute lockout.")
+            print("  Re-run 'study-reddit' when you are ready to try again.")
+            print("-" * 65 + "\n")
+            sys.exit(1)
+
+if __name__ == "__main__":
+    main()

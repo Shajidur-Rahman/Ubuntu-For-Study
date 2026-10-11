@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+import sys
+import os
+import subprocess
+import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from hsc_math_engine import get_hsc_problem
+import study_lockout
+
+SERVICE = "facebook"
+
+def check_status():
+    res = subprocess.run(["sudo", "/usr/local/bin/study-timer-daemon", "status", SERVICE], capture_output=True, text=True)
+    return res.stdout.strip()
+
+def main():
+    print("=" * 65)
+    print("     FACEBOOK STUDY GROUP - HSC INTENTIONAL ACCESS GATE")
+    print("=" * 65)
+
+    # 1. Check 30-minute lockout
+    is_locked, rem_mins = study_lockout.check_lockout(SERVICE)
+    if is_locked:
+        print("\n" + "!" * 65)
+        print("  ⛔ ACCESS TEMPORARILY LOCKED OUT!")
+        print(f"  You failed 3 math attempts earlier.")
+        print(f"  Penalty active: {rem_mins} minute(s) remaining.")
+        print("  No math challenges or access are permitted during lockout.")
+        print("  Step away from the screen and focus on your offline study!")
+        print("!" * 65 + "\n")
+        sys.exit(1)
+
+    # 2. Check if currently active
+    status = check_status()
+    if status.startswith("UNLOCKED"):
+        print(f"\n[!] Facebook is CURRENTLY ACTIVE: {status}")
+        choice = input("\nDo you want to (1) Keep using it, or (2) Lock it now? [1/2]: ").strip()
+        if choice == "2":
+            subprocess.run(["sudo", "/usr/local/bin/study-timer-daemon", "lock", SERVICE])
+            print("[✓] Facebook has been locked immediately. Excellent self-control!")
+        return
+
+    attempts_left = study_lockout.get_attempts_left(SERVICE)
+    print(f"\n[STATUS] You have {attempts_left} of 3 attempt(s) remaining.")
+    print("WARNING: 3 failed attempts will trigger an automatic 30-MINUTE LOCKOUT.\n")
+    print("Take out your paper, pencil, and calculate carefully (2-3 mins):\n")
+
+    problem_text, correct_answer = get_hsc_problem()
+    print("-" * 65)
+    print(problem_text)
+    print("-" * 65)
+
+    try:
+        user_input = input("\nYour calculated answer (integer): ").strip()
+    except (KeyboardInterrupt, EOFError):
+        print("\nAborted.")
+        return
+
+    is_valid_int = user_input.lstrip("-").isdigit() and len(user_input.lstrip("-")) > 0
+
+    if is_valid_int and int(user_input) == correct_answer:
+        study_lockout.record_success(SERVICE)
+        print("\n" + "=" * 65)
+        print("  [✓] CORRECT! HSC CALCULATION VERIFIED.")
+        print("  Unlocking Facebook for EXACTLY 14 MINUTES.")
+        print("  Focus strictly on your study group!")
+        print("=" * 65)
+
+        subprocess.run(["sudo", "/usr/local/bin/study-timer-daemon", "unlock", SERVICE, "14"])
+        print("\n[✓] Facebook is now unlocked.")
+        print("A desktop timer is running. Facebook will auto-lock in 14 minutes.\n")
+        input("Press Enter to close this terminal (timer continues in background)...")
+    else:
+        rem, is_now_locked = study_lockout.record_failure(SERVICE)
+        if is_now_locked:
+            print("\n" + "!" * 65)
+            print(f"  [✗] INCORRECT! (The correct answer was {correct_answer})")
+            print("  ⛔ 3 FAILED ATTEMPTS REACHED.")
+            print("  PENALTY APPLIED: You are now LOCKED OUT for 30 MINUTES.")
+            print("  No more challenges allowed. Return to your books!")
+            print("!" * 65 + "\n")
+            sys.exit(1)
+        else:
+            print("\n" + "-" * 65)
+            print(f"  [✗] INCORRECT ANSWER!")
+            print(f"  You have {rem} attempt(s) left before a 30-minute lockout.")
+            print("  Re-run 'study-fb' when you are ready to try again.")
+            print("-" * 65 + "\n")
+            sys.exit(1)
+
+if __name__ == "__main__":
+    main()

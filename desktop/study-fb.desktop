@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Facebook Study Group (14 Min Access)
+Comment=Unlock Facebook for 14 minutes by solving an HSC differentiation math challenge
+Exec=gnome-terminal -- /usr/local/bin/study-fb
+Icon=accessories-calculator
+Terminal=false
+Type=Application
+Categories=Education;Utility;
+Keywords=study;facebook;timer;math;differentiation;

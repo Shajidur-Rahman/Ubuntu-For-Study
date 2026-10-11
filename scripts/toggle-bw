@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# toggle-bw: Toggle or enforce Grayscale study display on Ubuntu
+
+SCHEMA_ID="org.gnome.shell.extensions.bedtime-mode"
+SCHEMA_DIR="$HOME/.local/share/gnome-shell/extensions/gnomebedtime@ionutbortis.gmail.com/schemas/"
+
+export DISPLAY="${DISPLAY:-:0}"
+export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
+USER_UID=$(id -u)
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/${USER_UID}/bus}"
+
+case "$1" in
+    --force-on|--ensure-on|on)
+        gsettings --schemadir "$SCHEMA_DIR" set "$SCHEMA_ID" bedtime-mode-active false 2>/dev/null || true
+        sleep 0.15
+        gsettings --schemadir "$SCHEMA_DIR" set "$SCHEMA_ID" bedtime-mode-active true 2>/dev/null || true
+        command -v notify-send >/dev/null 2>&1 && notify-send -i video-display "Display" "Grayscale Study Mode Active" 2>/dev/null || true
+        echo "Grayscale Mode Enabled"
+        ;;
+    --force-off|off)
+        gsettings --schemadir "$SCHEMA_DIR" set "$SCHEMA_ID" bedtime-mode-active false 2>/dev/null || true
+        command -v notify-send >/dev/null 2>&1 && notify-send -i video-display "Display" "Full Color Mode (Online Class)" 2>/dev/null || true
+        echo "Full Color Mode Enabled"
+        ;;
+    *)
+        CURRENT=$(gsettings --schemadir "$SCHEMA_DIR" get "$SCHEMA_ID" bedtime-mode-active 2>/dev/null || echo "false")
+        if [ "$CURRENT" = "true" ]; then
+            gsettings --schemadir "$SCHEMA_DIR" set "$SCHEMA_ID" bedtime-mode-active false 2>/dev/null || true
+            command -v notify-send >/dev/null 2>&1 && notify-send -u critical -i video-display "ONLINE CLASS MODE" "Full Color Mode Enabled (for Online Class)" 2>/dev/null || true
+            echo "Full Color Mode Enabled (for Online Class)"
+        else
+            gsettings --schemadir "$SCHEMA_DIR" set "$SCHEMA_ID" bedtime-mode-active false 2>/dev/null || true
+            sleep 0.15
+            gsettings --schemadir "$SCHEMA_DIR" set "$SCHEMA_ID" bedtime-mode-active true 2>/dev/null || true
+            command -v notify-send >/dev/null 2>&1 && notify-send -i video-display "STUDY MODE" "Grayscale Mode Enabled (Black & White)" 2>/dev/null || true
+            echo "Grayscale Mode Enabled (Study Mode)"
+        fi
+        ;;
+esac

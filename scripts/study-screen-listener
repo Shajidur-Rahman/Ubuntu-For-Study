@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Listen for screen unlock events to ensure Grayscale is restored
+TOGGLE_CMD=""
+if [ -x "$HOME/.local/bin/toggle-bw" ]; then
+    TOGGLE_CMD="$HOME/.local/bin/toggle-bw"
+elif command -v toggle-bw >/dev/null 2>&1; then
+    TOGGLE_CMD="toggle-bw"
+else
+    TOGGLE_CMD="/usr/local/bin/toggle-bw"
+fi
+
+dbus-monitor --session "type='signal',interface='org.gnome.ScreenSaver',member='ActiveChanged'" 2>/dev/null | while read -r line; do
+    if echo "$line" | grep -q "boolean false"; then
+        # Screen was just unlocked!
+        sleep 0.5
+        $TOGGLE_CMD --force-on >/dev/null 2>&1
+    fi
+done

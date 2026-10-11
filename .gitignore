@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary & backup files
+*.bak
+*.tmp
+*.log
+*~
+
+# Credentials & secrets (never commit!)
+*token*
+*.key
+*.pem
+credentials*
+.git-credentials

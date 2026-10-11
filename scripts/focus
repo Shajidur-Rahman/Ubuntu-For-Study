@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+import sys
+import time
+import subprocess
+import os
+
+def set_dnd(enable=True):
+    val = "false" if enable else "true"
+    subprocess.run(["gsettings", "set", "org.gnome.desktop.notifications", "show-banners", val], stderr=subprocess.DEVNULL)
+
+def main():
+    mins = 25
+    if len(sys.argv) > 1 and sys.argv[1].isdigit():
+        mins = int(sys.argv[1])
+    
+    total_seconds = mins * 60
+    
+    # Silence notifications
+    set_dnd(True)
+    
+    print("\n" + "=" * 55)
+    print(f"      MONOTASKING FOCUS TIMER: {mins} MINUTES")
+    print("=" * 55)
+    print(" [✓] Notifications Muted (Do Not Disturb)")
+    print(" [✓] Tip: Press F11 in your browser/document for true fullscreen")
+    print("=" * 55 + "\n")
+
+    try:
+        start = time.time()
+        while True:
+            elapsed = int(time.time() - start)
+            rem = total_seconds - elapsed
+            if rem <= 0:
+                break
+            
+            m = rem // 60
+            s = rem % 60
+            pct = int((elapsed / total_seconds) * 30)
+            bar = "█" * pct + "░" * (30 - pct)
+            print(f"\r  [{bar}] {m:02d}:{s:02d} remaining", end="", flush=True)
+            time.sleep(1)
+        
+        print("\n\n" + "=" * 55)
+        print("  🎉 FOCUS SESSION COMPLETE! Great work!")
+        print("  Take a 5-minute stretch/water break.")
+        print("=" * 55 + "\n")
+        
+        # Restore notifications
+        set_dnd(False)
+        
+        env = os.environ.copy()
+        env["DISPLAY"] = os.environ.get("DISPLAY", ":0")
+        env["WAYLAND_DISPLAY"] = os.environ.get("WAYLAND_DISPLAY", "wayland-0")
+        uid = os.getuid()
+        env["DBUS_SESSION_BUS_ADDRESS"] = os.environ.get("DBUS_SESSION_BUS_ADDRESS", f"unix:path=/run/user/{uid}/bus")
+        subprocess.run(["notify-send", "-u", "critical", "-i", "alarm", "Focus Session Complete", f"Completed {mins} minutes of deep focus! Take a short break."], env=env, stderr=subprocess.DEVNULL)
+        
+    except KeyboardInterrupt:
+        print("\n\n[!] Session cancelled.")
+        set_dnd(False)
+
+if __name__ == "__main__":
+    main()
