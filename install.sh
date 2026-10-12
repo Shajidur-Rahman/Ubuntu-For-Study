@@ -82,6 +82,24 @@ echo "[2/8] Checking system dependencies..."
 apt-get update -qq
 apt-get install -y -qq curl python3 unzip e2fsprogs gnome-shell-extension-manager libglib2.0-bin >/dev/null
 
+# Fix GPU MMIO Privring lockups & multi-minute login freezes on hybrid NVIDIA/Intel laptops
+if lspci -d 10de: 2>/dev/null | grep -qi "NVIDIA"; then
+    echo "  Configuring stable graphics (blacklisting crashing nouveau driver)..."
+    cat << 'EOF' > /etc/modprobe.d/blacklist-nouveau.conf
+# Blacklist nouveau to fix GPU PRIVRING MMIO lockups and multi-minute boot/login freeze
+blacklist nouveau
+blacklist lbm-nouveau
+options nouveau modeset=0
+alias nouveau off
+alias lbm-nouveau off
+EOF
+    if [ -f /etc/default/grub ] && ! grep -q "modprobe.blacklist=nouveau" /etc/default/grub; then
+        sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 modprobe.blacklist=nouveau"/' /etc/default/grub
+        update-grub >/dev/null 2>&1 || true
+    fi
+    update-initramfs -u >/dev/null 2>&1 || true
+fi
+
 # ------------------------------------------------------------------------------
 # 3. 3-Tier Network & Adult Filter (Hosts + Cloudflare Family DNS)
 # ------------------------------------------------------------------------------
@@ -589,8 +607,9 @@ gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-autom
 gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-from 0.0
 gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-to 24.0
 gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 4000
-gsettings set org.gnome.desktop.background picture-uri ''
-gsettings set org.gnome.desktop.background picture-uri-dark ''
+gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
+gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
+gsettings set org.gnome.desktop.background picture-options 'zoom'
 gsettings set org.gnome.desktop.background color-shading-type 'solid'
 gsettings set org.gnome.desktop.background primary-color '#1e1e1e'
 " 2>/dev/null || true
