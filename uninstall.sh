@@ -24,8 +24,9 @@ systemctl disable --now study-guardian.service 2>/dev/null || true
 rm -f /etc/systemd/system/study-guardian.service
 systemctl daemon-reload
 
-# 2. Restore /etc/hosts
-chattr -i /etc/hosts 2>/dev/null || true
+# 2. Restore /etc/hosts & remove blocklists
+chattr -i /etc/hosts /etc/hosts.master 2>/dev/null || true
+rm -f /etc/hosts.master
 if [ -f /etc/study-mode-backup/hosts.bak ]; then
     cp /etc/study-mode-backup/hosts.bak /etc/hosts
 else
@@ -45,13 +46,14 @@ rm -f /etc/systemd/resolved.conf.d/strict-study-dns.conf
 systemctl restart systemd-resolved
 resolvectl flush-caches 2>/dev/null || true
 
-# 4. Remove browser policies
+# 4. Remove browser policies & unblock all websites
 rm -f /etc/opt/chrome/policies/managed/study-restrictions.json
 rm -f /etc/brave/policies/managed/study-restrictions.json
+rm -f /etc/chromium/policies/managed/study-restrictions.json
 rm -f /etc/firefox/policies/policies.json
 rm -f /var/snap/firefox/current/policies/policies.json 2>/dev/null || true
 
-# 5. Remove daemon & sudoers
+# 5. Remove daemon, services & local study scripts
 rm -f /etc/sudoers.d/study-timer
 rm -f /usr/local/bin/study-timer-daemon /usr/local/bin/study-fb-daemon
 rm -f /usr/local/bin/study-fb /usr/local/bin/study-reddit /usr/local/bin/toggle-bw /usr/local/bin/focus /usr/local/bin/study-browser
@@ -59,21 +61,31 @@ rm -f /usr/local/bin/hsc_math_engine.py /usr/local/bin/study_lockout.py /usr/loc
 rm -rf /etc/study-timer /usr/share/study-browser "$TARGET_HOME/.config/study-browser"
 rm -f /lib/systemd/system-sleep/study-resume-grayscale.sh
 rm -f "$TARGET_HOME/.config/systemd/user/study-screen-listener.service"
-su - "$TARGET_USER" -c "systemctl --user disable --now study-screen-listener.service" 2>/dev/null || true
+rm -f "$TARGET_HOME/.config/systemd/user/study-extension-server.service"
+rm -f "$TARGET_HOME/.local/bin/study-screen-listener" "$TARGET_HOME/.local/bin/toggle-bw" "$TARGET_HOME/.local/bin/study-browser" "$TARGET_HOME/.local/bin/focus" "$TARGET_HOME/.local/bin/study-fb" "$TARGET_HOME/.local/bin/study-reddit"
+su - "$TARGET_USER" -c "systemctl --user disable --now study-screen-listener.service study-extension-server.service" 2>/dev/null || true
+su - "$TARGET_USER" -c "systemctl --user daemon-reload" 2>/dev/null || true
 
 # 6. Restore Color & Desktop settings
 su - "$TARGET_USER" -c "
-$TARGET_HOME/.local/bin/toggle-bw --force-off 2>/dev/null || true
+SCHEMA_DIR=\"$TARGET_HOME/.local/share/gnome-shell/extensions/gnomebedtime@ionutbortis.gmail.com/schemas/\"
+if [ -d \"\$SCHEMA_DIR\" ]; then
+    gsettings --schemadir \"\$SCHEMA_DIR\" set org.gnome.shell.extensions.bedtime-mode bedtime-mode-active false 2>/dev/null || true
+fi
 gsettings set org.gnome.desktop.interface enable-animations true
 gsettings set org.gnome.desktop.sound event-sounds true
 gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed true
 gsettings reset org.gnome.settings-daemon.plugins.color night-light-enabled
-gsettings reset org.gnome.desktop.background picture-uri
-gsettings reset org.gnome.desktop.background picture-uri-dark
-gsettings reset org.gnome.desktop.background primary-color
+gsettings reset org.gnome.settings-daemon.plugins.color night-light-schedule-automatic
+gsettings reset org.gnome.settings-daemon.plugins.color night-light-temperature
+gsettings reset org.gnome.settings-daemon.plugins.media-keys custom-keybindings
+gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
+gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
+gsettings set org.gnome.desktop.background picture-options 'zoom'
+gsettings set org.gnome.desktop.background primary-color '#1e1e1e'
 " 2>/dev/null || true
 
-# 7. Remove desktop icons
+# 7. Remove desktop icons & launchers
 rm -f "$TARGET_HOME/Desktop/online-class-mode.desktop"
 rm -f "$TARGET_HOME/Desktop/study-fb.desktop"
 rm -f "$TARGET_HOME/Desktop/study-reddit.desktop"
@@ -82,5 +94,6 @@ rm -f "$TARGET_HOME/.local/share/applications/online-class-mode.desktop"
 rm -f "$TARGET_HOME/.local/share/applications/study-fb.desktop"
 rm -f "$TARGET_HOME/.local/share/applications/study-reddit.desktop"
 rm -f "$TARGET_HOME/.local/share/applications/study-browser.desktop"
+su - "$TARGET_USER" -c "update-desktop-database '$TARGET_HOME/.local/share/applications'" 2>/dev/null || true
 
-echo "[✓] All settings restored to normal Ubuntu defaults."
+echo "[✓] All blocked sites and restrictions removed. Restored to normal Ubuntu defaults."
