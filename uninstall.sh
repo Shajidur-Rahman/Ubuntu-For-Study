@@ -58,11 +58,17 @@ rm -f /etc/sudoers.d/study-timer
 rm -f /usr/local/bin/study-timer-daemon /usr/local/bin/study-fb-daemon
 rm -f /usr/local/bin/study-fb /usr/local/bin/study-reddit /usr/local/bin/toggle-bw /usr/local/bin/focus /usr/local/bin/study-browser
 rm -f /usr/local/bin/hsc_math_engine.py /usr/local/bin/study_lockout.py /usr/local/bin/study-screen-listener
+rm -f /usr/local/bin/brave /usr/local/bin/brave-browser /usr/local/bin/brave-browser-stable
+rm -f /usr/local/bin/google-chrome /usr/local/bin/google-chrome-stable
 rm -rf /etc/study-timer /usr/share/study-browser "$TARGET_HOME/.config/study-browser"
 rm -f /lib/systemd/system-sleep/study-resume-grayscale.sh
 rm -f "$TARGET_HOME/.config/systemd/user/study-screen-listener.service"
 rm -f "$TARGET_HOME/.config/systemd/user/study-extension-server.service"
 rm -f "$TARGET_HOME/.local/bin/study-screen-listener" "$TARGET_HOME/.local/bin/toggle-bw" "$TARGET_HOME/.local/bin/study-browser" "$TARGET_HOME/.local/bin/focus" "$TARGET_HOME/.local/bin/study-fb" "$TARGET_HOME/.local/bin/study-reddit"
+rm -f "$TARGET_HOME/.local/bin/brave" "$TARGET_HOME/.local/bin/brave-browser" "$TARGET_HOME/.local/bin/brave-browser-stable"
+rm -f "$TARGET_HOME/.local/bin/google-chrome" "$TARGET_HOME/.local/bin/google-chrome-stable"
+rm -f "$TARGET_HOME/.local/bin/hsc_math_engine.py" "$TARGET_HOME/.local/bin/study_lockout.py"
+rm -f "$TARGET_HOME/.local/share/applications/brave-browser.desktop" "$TARGET_HOME/.local/share/applications/google-chrome.desktop"
 su - "$TARGET_USER" -c "systemctl --user disable --now study-screen-listener.service study-extension-server.service" 2>/dev/null || true
 su - "$TARGET_USER" -c "systemctl --user daemon-reload" 2>/dev/null || true
 
